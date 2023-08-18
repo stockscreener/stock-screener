@@ -7,6 +7,7 @@ import lombok.*;
 @Table(name = "investors")
 @Getter
 @Setter
+@ToString(exclude = "user")
 public class InvestorEntity {
 	@Id
     private int id;

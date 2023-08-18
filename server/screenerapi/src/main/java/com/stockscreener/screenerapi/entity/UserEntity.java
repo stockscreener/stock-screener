@@ -1,6 +1,7 @@
 package com.stockscreener.screenerapi.entity;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import javax.persistence.*;
 
@@ -38,7 +39,7 @@ public class UserEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private UserRole role;
-    private LocalDate registeredAt;
+    private LocalDateTime registeredAt = LocalDateTime.now();
     private Integer screenId;
     @Enumerated(EnumType.STRING)
     private UserStatus status;

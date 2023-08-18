@@ -13,15 +13,15 @@ public class InvestorEntity {
     private int id;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "occupation")
+    @Column(length = 20)
     private Occupation occupation;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "industry")
+    @Column(length = 50)
     private Industry industry;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "annual_income")
+    @Column(length = 30)
     private AnnualIncome annualIncome;
 
     @OneToOne

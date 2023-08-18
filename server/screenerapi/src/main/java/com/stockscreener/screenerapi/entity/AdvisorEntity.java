@@ -24,6 +24,7 @@ public class AdvisorEntity {
     @Column(nullable = false)
     private AdvisorVerificationStatus verificationStatus = AdvisorVerificationStatus.NOT_VERIFIED;
     private String verificationRemark;
+    @Column(columnDefinition = "TIMESTAMP")
     private LocalDateTime verifiedAt;
     private Integer rating;
     @OneToOne

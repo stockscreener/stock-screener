@@ -39,7 +39,8 @@ public class UserEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private UserRole role;
-    private LocalDateTime registeredAt = LocalDateTime.now();
+    @Column(columnDefinition = "TIMESTAMP default CURRENT_TIMESTAMP")
+    private LocalDateTime registeredAt;
     private Integer screenId;
     @Enumerated(EnumType.STRING)
     private UserStatus status;

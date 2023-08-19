@@ -7,14 +7,13 @@ import lombok.*;
 @Table(name = "watchlists_stocks")
 @Getter
 @Setter
+@ToString(exclude = {"watchlist"})
 public class WatchlistStockEntity {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "watchlist_id")
     private WatchlistEntity watchlist;
 
     private Long stockId;

@@ -29,7 +29,7 @@ public class AdvisorEntity {
     @Column(columnDefinition = "DATETIME")
     private LocalDateTime verifiedAt;
     private Integer rating;
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @MapsId
     @JoinColumn(name = "id")
     private UserEntity user;

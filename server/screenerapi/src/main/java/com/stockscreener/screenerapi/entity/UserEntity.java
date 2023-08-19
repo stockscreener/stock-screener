@@ -16,7 +16,7 @@ import lombok.*;
 @Table(name = "users")
 @Getter
 @Setter
-@ToString(exclude = {"password", "screens", "advisor", "investor"})
+@ToString(exclude = {"password", "screens", "advisor", "investor", "watchlists", "feedbacks"})
 public class UserEntity {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,7 +45,7 @@ public class UserEntity {
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "ENUM('INVESTOR', 'ADVISOR', 'ADMIN') default 'INVESTOR'", nullable = false)
     private UserRole role;
-    @Column(columnDefinition = "TIMESTAMP default CURRENT_TIMESTAMP")
+    @Column(columnDefinition = "DATETIME default CURRENT_TIMESTAMP")
     private LocalDateTime registeredAt;
     private Long screenId;
     @Enumerated(EnumType.STRING)

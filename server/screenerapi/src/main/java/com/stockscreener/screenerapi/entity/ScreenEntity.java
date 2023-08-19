@@ -22,8 +22,7 @@ public class ScreenEntity {
 	    @Column(columnDefinition = "TEXT")
 	    private String description;
 
-	    @ManyToOne
-	    @JoinColumn(name = "user_id")
+	    @ManyToOne(fetch = FetchType.LAZY)
 	    private UserEntity user;
 
 	    private boolean isAvailable;

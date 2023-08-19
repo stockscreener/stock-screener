@@ -21,6 +21,6 @@ public class FeedbackEntity {
     @Column(length = 255)
     private String review;
 
-    @Column(columnDefinition = "TIMESTAMP default CURRENT_TIMESTAMP")
+    @Column(columnDefinition = "DATETIME default CURRENT_TIMESTAMP")
     private LocalDateTime reviewedAt;
 }

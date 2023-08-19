@@ -20,10 +20,10 @@ public class SessionEntity {
     @Column(name = "ip_address", length = 40)
     private String ipAddress;
 
-    @Column(columnDefinition = "TIMESTAMP default CURRENT_TIMESTAMP")
+    @Column(columnDefinition = "DATETIME default CURRENT_TIMESTAMP")
     private LocalDateTime startTime;
 
-    @Column(columnDefinition = "TIMESTAMP default CURRENT_TIMESTAMP")
+    @Column(columnDefinition = "DATETIME default CURRENT_TIMESTAMP")
     private LocalDateTime endTime;
 
     private boolean isValid;

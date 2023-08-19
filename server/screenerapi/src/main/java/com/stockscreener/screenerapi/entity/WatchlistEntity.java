@@ -8,7 +8,7 @@ import java.util.List;
 @Table(name = "watchlists")
 @Getter
 @Setter
-@ToString(exclude = {"user", "screen"})
+@ToString(exclude = {"user", "screen", "watchlistStocks"})
 public class WatchlistEntity {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

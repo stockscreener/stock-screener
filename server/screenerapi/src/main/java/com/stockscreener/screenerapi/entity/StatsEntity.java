@@ -14,7 +14,7 @@ public class StatsEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 	
-	@Column(columnDefinition = "DATE default ")
+	@Column(columnDefinition = "DATETIME default CURRENT_TIMESTAMP")
     private LocalDate recordDate;
 
     private Long newInvestors;

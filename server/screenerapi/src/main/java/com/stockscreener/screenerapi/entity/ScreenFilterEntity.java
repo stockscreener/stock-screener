@@ -18,7 +18,6 @@ public class ScreenFilterEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "screen_id")
     private ScreenEntity screen;
 
     @ManyToOne

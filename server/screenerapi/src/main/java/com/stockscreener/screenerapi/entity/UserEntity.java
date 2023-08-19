@@ -6,6 +6,10 @@ import java.util.List;
 
 import javax.persistence.*;
 
+import com.stockscreener.screenerapi.enums.Gender;
+import com.stockscreener.screenerapi.enums.UserRole;
+import com.stockscreener.screenerapi.enums.UserStatus;
+
 import lombok.*;
 
 @Entity
@@ -16,7 +20,7 @@ import lombok.*;
 public class UserEntity {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 	@Column(length = 100)	
 	private String name;
     @Column(length = 100, unique = true)
@@ -24,6 +28,7 @@ public class UserEntity {
     @Column(unique = true, nullable = false)
     private String email;
     @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "ENUM('MALE', 'FEMALE', 'OTHER')")
     private Gender gender;
     @Column(length = 20, unique = true)
     private String mobileNo;
@@ -38,24 +43,31 @@ public class UserEntity {
     @Column(nullable = false)
     private String password;
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(columnDefinition = "ENUM('INVESTOR', 'ADVISOR', 'ADMIN') default 'INVESTOR'", nullable = false)
     private UserRole role;
     @Column(columnDefinition = "TIMESTAMP default CURRENT_TIMESTAMP")
     private LocalDateTime registeredAt;
-    private Integer screenId;
+    private Long screenId;
     @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "ENUM('ACTIVE', 'BLOCKED', 'DELETED') default 'ACTIVE'", nullable = false)
     private UserStatus status;
     private Boolean isSubscribed;
 
     
 /*  Inverse side of Bidirectional entities */
     
-    @OneToOne(mappedBy = "user")
+    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
     private InvestorEntity investor;
 
-    @OneToOne(mappedBy = "user")
+    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
     private AdvisorEntity advisor;
 
     @OneToMany(mappedBy = "user")
     private List<ScreenEntity> screens;
+    
+    @OneToMany(mappedBy = "user")
+    private List<WatchlistEntity> watchlists;
+    
+    @OneToMany(mappedBy = "user")
+    private List<FeedbackEntity> feedbacks;
 }

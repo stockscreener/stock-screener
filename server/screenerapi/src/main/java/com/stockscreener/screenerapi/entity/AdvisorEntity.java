@@ -5,6 +5,8 @@ import java.time.LocalDateTime;
 
 import javax.persistence.*;
 
+import com.stockscreener.screenerapi.enums.AdvisorVerificationStatus;
+
 import lombok.*;
 
 @Entity
@@ -14,17 +16,17 @@ import lombok.*;
 @ToString(exclude = "user")
 public class AdvisorEntity {
 	@Id
-    private int id;
+    private Long id;
     @Column(length = 100)
     private String registrationNo;
     private LocalDate validTill;
     @Column(columnDefinition = "TEXT")
     private String about;
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(columnDefinition = "ENUM('NOT_VERIFIED', 'VERIFIED', 'REJECTED') default 'NOT_VERIFIED'", nullable = false)
     private AdvisorVerificationStatus verificationStatus = AdvisorVerificationStatus.NOT_VERIFIED;
     private String verificationRemark;
-    @Column(columnDefinition = "TIMESTAMP")
+    @Column(columnDefinition = "DATETIME")
     private LocalDateTime verifiedAt;
     private Integer rating;
     @OneToOne

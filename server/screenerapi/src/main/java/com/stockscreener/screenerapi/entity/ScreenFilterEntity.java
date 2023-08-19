@@ -2,6 +2,8 @@ package com.stockscreener.screenerapi.entity;
 
 import javax.persistence.*;
 
+import com.stockscreener.screenerapi.enums.FilterConstraint;
+
 import lombok.*;
 
 @Entity
@@ -13,7 +15,7 @@ public class ScreenFilterEntity {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
-    private int id;
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "screen_id")
@@ -24,9 +26,10 @@ public class ScreenFilterEntity {
     private StockAttributeEntity stockAttribute;
 
     @Enumerated(EnumType.STRING)
-    private FilterConstraint constraint;
+    @Column(columnDefinition = "ENUM('EQUAL', 'BELOW', 'ABOVE', 'BELOW_OR_EQUAL', 'ABOVE_OR_EQUAL') default 'EQUAL'")
+    private FilterConstraint filterConstraint;
 
     private Long value;
 
-    private int columnPosition;
+    private Integer columnPosition;
 }

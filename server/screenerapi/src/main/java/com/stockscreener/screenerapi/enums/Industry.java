@@ -1,4 +1,4 @@
-package com.stockscreener.screenerapi.entity;
+package com.stockscreener.screenerapi.enums;
 
 public enum Industry {
 	AUTO_AND_AUTO_ANCILLARY, BANKING_AND_FINANCIAL_SERVICES, FMCG, INFORMATION_TECHNOLOGY,

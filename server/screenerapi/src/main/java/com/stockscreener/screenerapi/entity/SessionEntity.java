@@ -23,7 +23,7 @@ public class SessionEntity {
     @Column(columnDefinition = "DATETIME default CURRENT_TIMESTAMP")
     private LocalDateTime startTime;
 
-    @Column(columnDefinition = "DATETIME default CURRENT_TIMESTAMP")
+    @Column(columnDefinition = "DATETIME")
     private LocalDateTime endTime;
 
     private boolean isValid;

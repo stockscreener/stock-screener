@@ -1,5 +1,21 @@
 package com.stockscreener.screenerapi.repository;
 
-public class UserRepository {
+import java.util.Optional;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import com.stockscreener.screenerapi.entity.UserEntity;
+
+import java.lang.String;
+import java.util.List;
+@Repository
+
+public interface UserRepository extends JpaRepository<UserEntity, Long> {
+   
+	//Optional<User> findByusernameAndpassword(String us,String pass);
+//	List<User> findByUsernameAndPassword(String username, String pass);
+	Optional<UserEntity> findByUsernameAndPassword(String username, String pass);
+
 
 }

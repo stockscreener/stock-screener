@@ -3,9 +3,7 @@ package com.stockscreener.screenerapi.entity;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-
 import javax.persistence.*;
-
 import com.stockscreener.screenerapi.enums.Gender;
 import com.stockscreener.screenerapi.enums.UserRole;
 import com.stockscreener.screenerapi.enums.UserStatus;
@@ -16,6 +14,7 @@ import lombok.*;
 @Table(name = "users")
 @Getter
 @Setter
+@NoArgsConstructor
 @ToString(exclude = {"password", "screens", "advisor", "investor", "watchlists", "feedbacks"})
 public class UserEntity {
 	@Id
@@ -70,4 +69,11 @@ public class UserEntity {
     
     @OneToMany(mappedBy = "user")
     private List<FeedbackEntity> feedbacks;
+	public UserEntity(String email2, String password2, String confirmpassword, UserRole role2) {
+	
+	this.email=email2;
+	this.password=password2;
+	this.password=confirmpassword;
+	this.role=role2;
+}
 }

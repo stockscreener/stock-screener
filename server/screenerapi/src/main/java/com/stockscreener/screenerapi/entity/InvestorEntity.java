@@ -1,17 +1,16 @@
 package com.stockscreener.screenerapi.entity;
 
 import javax.persistence.*;
-
 import com.stockscreener.screenerapi.enums.AnnualIncome;
 import com.stockscreener.screenerapi.enums.Industry;
 import com.stockscreener.screenerapi.enums.Occupation;
-
 import lombok.*;
 
 @Entity
 @Table(name = "investors")
 @Getter
 @Setter
+@NoArgsConstructor
 @ToString(exclude = "user")
 public class InvestorEntity {
 	@Id

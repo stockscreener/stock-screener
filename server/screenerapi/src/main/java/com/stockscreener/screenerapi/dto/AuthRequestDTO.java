@@ -13,10 +13,9 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class AuthRequest {
+public class AuthRequestDTO {
 	@NotBlank(message = "UserName can't be blank or null!!!")
 	private String username;
 	@NotBlank(message = "Password required !!!!")
-	@Pattern(regexp = "((?=.*\\d)(?=.*[a-z])(?=.*[#@$*]).{5,20})", message = "Blank or invalid password !!!")
 	private String password;
 }

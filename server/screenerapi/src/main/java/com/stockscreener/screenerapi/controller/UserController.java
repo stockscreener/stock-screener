@@ -1,73 +1,73 @@
 package com.stockscreener.screenerapi.controller;
 
-import java.lang.ProcessBuilder.Redirect;
 import java.util.List;
-
 import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import com.stockscreener.screenerapi.dto.ApiResponse;
-import com.stockscreener.screenerapi.dto.AuthRequest;
+import com.stockscreener.screenerapi.dto.AdminProfileDTO;
+import com.stockscreener.screenerapi.dto.AdvisorProfileDTO;
+import com.stockscreener.screenerapi.dto.ApiResponseDTO;
+import com.stockscreener.screenerapi.dto.AuthRequestDTO;
+import com.stockscreener.screenerapi.dto.InvestorProfileDTO;
 import com.stockscreener.screenerapi.entity.UserEntity;
-import com.stockscreener.screenerapi.enums.UserRole;
 import com.stockscreener.screenerapi.service.UserService;
 
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/user")
 @CrossOrigin(origins="*")
-
+@Validated
 public class UserController {
 	@Autowired
 	private UserService userService;
-	public UserController() {
-		System.out.println("in ctor of"+getClass());
+	
+	// update profile for admin
+	@PutMapping("/admin/profile")
+	public ResponseEntity<?> method(@RequestBody @Valid AdminProfileDTO admin){
+		
+		return ResponseEntity.ok(userService.updateAdminProfile(admin));
 	}
 	
-	@GetMapping
-	public List<UserEntity> listAllUsers(){
-		return userService.getAllUsers();
+	// update profile for investor
+	@PutMapping("/investor/profile")
+	public ResponseEntity<?> method(@RequestBody @Valid InvestorProfileDTO investor){
+		System.out.println(investor);
+		return ResponseEntity.ok(userService.updateInvestorProfile(investor));
 	}
 	
-	@PostMapping("/profile")
-	public UserEntity addUser(@RequestBody UserEntity user )
-	{
-		return userService.addNewUser(user);
+	// update profile for Advisor
+	@PutMapping("/advisor/profile")
+	public ResponseEntity<?> method(@RequestBody @Valid AdvisorProfileDTO advisor){
+		return ResponseEntity.ok(userService.updateAdvisorProfile(advisor));
 	}
 	
-	@PostMapping("/signup")
-	public String  signUp(@RequestParam String email,@RequestParam String password,@RequestParam String confirmpassword,@RequestParam UserRole role )
-	{
-		UserEntity newuser=new UserEntity(  email,  password, confirmpassword,role);
-		 userService.addNewUser(newuser);
-		 return "redirect:/signIn";
-	}
-	
-	@DeleteMapping("/{id}")
-	public ApiResponse deleteUserDetails(@PathVariable Long id)
-	{
-		return userService.deleteUserDetails(id);
-	}
-	
-	@PutMapping
-	public UserEntity updateUserDetails(@RequestBody UserEntity user)
-	{
-         userService.getUserDetails(user.getId());
-         return userService.addNewUser(user);
-         
-     }
-	
-	@PostMapping("/signIn")
-	public ResponseEntity<?> authenticateUser(@RequestBody @Valid AuthRequest request)
-	{
-		System.out.println("In SignIn "+request);
-		return new ResponseEntity<>(userService.authenticateUser(request),HttpStatus.OK);
-	}
-	
-	
+//	@GetMapping
+//	public List<UserEntity> listAllUsers(){
+//		return userService.getAllUsers();
+//	}
+//	@PutMapping("//profile")
+//	public UserEntity addUser(@RequestBody UserEntity user)
+//	{
+//		return userService.addNewUser(user, false);
+//	}
+//	
+//	@DeleteMapping("/{id}")
+//	public ApiResponseDTO deleteUserDetails(@PathVariable Long id)
+//	{
+//		return userService.deleteUserDetails(id);
+//	}
+//	
+//	@PutMapping
+//	public UserEntity updateUserDetails(@RequestBody UserEntity user)
+//	{
+//         userService.getUserDetails(user.getId());
+//         return userService.addNewUser(user, false);
+//         
+//     }
+
 	
 }

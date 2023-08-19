@@ -55,25 +55,52 @@ public class UserEntity {
     
 /*  Inverse side of Bidirectional entities */
     
-    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     private InvestorEntity investor;
 
-    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     private AdvisorEntity advisor;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
     private List<ScreenEntity> screens;
     
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
     private List<WatchlistEntity> watchlists;
     
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
     private List<FeedbackEntity> feedbacks;
+    
+    /* Constructors and Methods */
+    
 	public UserEntity(String email2, String password2, String confirmpassword, UserRole role2) {
+		this.email=email2;
+		this.password=password2;
+		this.password=confirmpassword;
+		this.role=role2;
+	}
 	
-	this.email=email2;
-	this.password=password2;
-	this.password=confirmpassword;
-	this.role=role2;
-}
+	public void addInvestor(InvestorEntity investor) {
+		this.setInvestor(investor);
+		investor.setUser(this);
+	}
+	
+	public void addAdvisor(AdvisorEntity advisor) {
+		this.setAdvisor(advisor);
+		advisor.setUser(this);
+	}
+	
+	public void addScreen(ScreenEntity screen) {
+		this.getScreens().add(screen);
+		screen.setUser(this);
+	}
+	
+	public void addWatchlist(WatchlistEntity watchlist) {
+		this.getWatchlists().add(watchlist);
+		watchlist.setUser(this);
+	}
+	
+	public void addFeedback(FeedbackEntity feedback) {
+		this.getFeedbacks().add(feedback);
+		feedback.setUser(this);
+	}
 }

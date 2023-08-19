@@ -28,7 +28,7 @@ import lombok.*;
 	}
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
 	@Column(length = 100)	
 	private String name;
     @Column(length = 100, unique = true)

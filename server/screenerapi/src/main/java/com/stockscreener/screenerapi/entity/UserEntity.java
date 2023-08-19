@@ -2,6 +2,7 @@ package com.stockscreener.screenerapi.entity;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import javax.persistence.*;
 
@@ -11,7 +12,7 @@ import lombok.*;
 @Table(name = "users")
 @Getter
 @Setter
-@ToString(exclude = "password")
+@ToString(exclude = {"password", "screens", "advisor", "investor"})
 public class UserEntity {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,4 +46,16 @@ public class UserEntity {
     @Enumerated(EnumType.STRING)
     private UserStatus status;
     private Boolean isSubscribed;
+
+    
+/*  Inverse side of Bidirectional entities */
+    
+    @OneToOne(mappedBy = "user")
+    private InvestorEntity investor;
+
+    @OneToOne(mappedBy = "user")
+    private AdvisorEntity advisor;
+
+    @OneToMany(mappedBy = "user")
+    private List<ScreenEntity> screens;
 }

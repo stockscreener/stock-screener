@@ -4,19 +4,26 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.transaction.Transactional;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.stockscreener.screenerapi.customException.ResourceNotFoundException;
+import com.stockscreener.screenerapi.customException.UserDoesNotHaveProperPermission;
 import com.stockscreener.screenerapi.dto.BlogEditReqDTO;
 import com.stockscreener.screenerapi.dto.BlogRespDTO;
 import com.stockscreener.screenerapi.dto.NewBlogReqDTO;
 import com.stockscreener.screenerapi.entity.BlogEntity;
+import com.stockscreener.screenerapi.entity.UserEntity;
+import com.stockscreener.screenerapi.enums.UserRole;
 import com.stockscreener.screenerapi.repository.BlogRepository;
 import com.stockscreener.screenerapi.repository.UserRepository;
 
 @Service
+@Transactional
 public class BlogServiceImpl implements BlogService {
 
     private final BlogRepository blogRepository;
@@ -45,6 +52,12 @@ public class BlogServiceImpl implements BlogService {
         // Save the blog to the repository
         blogRepository.save(blogEntity);
         return "Blog created successfully.";
+        
+        BlogEditReqDTO advisor;
+		UserEntity userEntity = userRepository.findById(advisor.getId()).orElseThrow(()->new ResourceNotFoundException("Invalid User"));
+    	
+        if(!userEntity.getRole().equals(UserRole.ADVISOR))
+        	throw new UserDoesNotHaveProperPermission("Permission denied. Only Advisors can create blogs.");
     }
 
     @Override
@@ -81,6 +94,13 @@ public class BlogServiceImpl implements BlogService {
         // Save the edited blog
         blogRepository.save(blogEntity);
         return "Blog edited successfully.";
+
+        BlogEditReqDTO advisor;
+		UserEntity userEntity = userRepository.findById(advisor.getId()).orElseThrow(()->new ResourceNotFoundException("Invalid User"));
+    	
+        if(!userEntity.getRole().equals(UserRole.ADVISOR))
+        	throw new UserDoesNotHaveProperPermission("Permission denied. Only Advisors can edit blogs.");
+    
     }
 
     @Override
@@ -96,6 +116,13 @@ public class BlogServiceImpl implements BlogService {
         blogRepository.save(blogEntity);
 
         return "Blog deleted successfully.";
+        
+        BlogEditReqDTO advisor;
+		UserEntity userEntity = userRepository.findById(advisor.getId()).orElseThrow(()->new ResourceNotFoundException("Invalid User"));
+    	
+        if(!userEntity.getRole().equals(UserRole.ADVISOR))
+        	throw new UserDoesNotHaveProperPermission("Permission denied. Only Advisors can delete blogs.");
+    
     }
 
     private BlogRespDTO convertToBlogRespDTO(BlogEntity blogEntity) {

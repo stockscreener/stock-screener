@@ -16,6 +16,7 @@ import com.stockscreener.screenerapi.dto.ApiResponseDTO;
 import com.stockscreener.screenerapi.dto.AuthRequestDTO;
 import com.stockscreener.screenerapi.dto.AuthResponseDTO;
 import com.stockscreener.screenerapi.dto.InvestorProfileDTO;
+import com.stockscreener.screenerapi.dto.UpdatePasswordDTO;
 import com.stockscreener.screenerapi.entity.AdvisorEntity;
 import com.stockscreener.screenerapi.entity.InvestorEntity;
 import com.stockscreener.screenerapi.entity.UserEntity;
@@ -128,6 +129,28 @@ public class UserServicesImpl implements UserService {
 		mapper.map(savedUser, investorDTO);
 		mapper.map(savedUser.getInvestor(), investorDTO);
 		return investorDTO;
+	}
+
+	@Override
+	public UserEntity getUserProfile(Long userId) {
+		UserEntity user = userRepository.findById(userId).orElseThrow(()->new ResourceNotFoundException("Invalid User!"));
+		if(user.getRole().equals(UserRole.INVESTOR))
+			user.getInvestor();
+		else if (user.getRole().equals(UserRole.ADVISOR))
+			user.getAdvisor();
+		return user;
+	}
+
+	@Override
+	public ApiResponseDTO updatePassword(UpdatePasswordDTO passwordDto) {
+		UserEntity user = userRepository.findById(passwordDto.getId()).orElseThrow(()->new ResourceNotFoundException("Invalid User!"));
+		if(user.getPassword().equals(passwordDto.getCurrentPassword())) {
+			user.setPassword(passwordDto.getNewPassword());
+		}else {
+			return new ApiResponseDTO("Invalid Password!");
+		}
+		userRepository.save(user);
+		return new ApiResponseDTO("Password Updated!");
 	}
 	
 

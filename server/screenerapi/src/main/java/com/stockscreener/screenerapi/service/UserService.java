@@ -7,6 +7,7 @@ import com.stockscreener.screenerapi.entity.UserEntity;
 
 public interface UserService {
 	
+	UserEntity getUserProfile(Long userId);
 	AdminProfileDTO updateAdminProfile(AdminProfileDTO admin);
 	AdvisorProfileDTO updateAdvisorProfile(AdvisorProfileDTO advisor);
 	InvestorProfileDTO updateInvestorProfile(InvestorProfileDTO admin);
@@ -16,6 +17,7 @@ public interface UserService {
 	UserEntity getUserDetails(long id);
 	ApiResponseDTO deleteUserDetails (Long id);
 	AuthResponseDTO authenticateUser(AuthRequestDTO request);
+	ApiResponseDTO updatePassword(UpdatePasswordDTO passwordDto);
 	
 
 }

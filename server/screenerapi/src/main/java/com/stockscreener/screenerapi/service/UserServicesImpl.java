@@ -1,5 +1,6 @@
 package com.stockscreener.screenerapi.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -53,6 +54,7 @@ public class UserServicesImpl implements UserService {
 		}else {
 			user.setRole(UserRole.INVESTOR);
 		}
+		user.setRegisteredAt(LocalDateTime.now());
 		user.setStatus(UserStatus.ACTIVE);
 		UserEntity newUser = userRepository.save(user);
 		return newUser;

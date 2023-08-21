@@ -1,7 +1,8 @@
 package com.stockscreener.screenerapi.service;
 
+import com.stockscreener.screenerapi.dto.AdvisorResponseDTO;
 import com.stockscreener.screenerapi.entity.AdvisorEntity;
 
 public interface AdvisorService {
-	AdvisorEntity addNewAdvisordetails(AdvisorEntity advisor);
+	AdvisorResponseDTO addNewAdvisordetails(AdvisorEntity advisor);
 }

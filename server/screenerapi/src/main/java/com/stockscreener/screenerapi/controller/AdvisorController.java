@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.stockscreener.screenerapi.dto.AdvisorResponseDTO;
 import com.stockscreener.screenerapi.entity.AdvisorEntity;
 import com.stockscreener.screenerapi.service.AdvisorService;
 
@@ -24,7 +25,7 @@ public class AdvisorController {
 	}
 	
 	@PostMapping
-	public AdvisorEntity addAdvisor(@RequestBody AdvisorEntity advisor)
+	public AdvisorResponseDTO addAdvisor(@RequestBody AdvisorEntity advisor)
 	{
 		return advisorService.addNewAdvisordetails(advisor);
 	}

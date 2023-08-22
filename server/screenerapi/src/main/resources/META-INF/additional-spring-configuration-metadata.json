@@ -1,0 +1,5 @@
+{"properties": [{
+  "name": "stock.api.url",
+  "type": "java.lang.String",
+  "description": "URL for Stock Data related Requests to stock microservice"
+}]}

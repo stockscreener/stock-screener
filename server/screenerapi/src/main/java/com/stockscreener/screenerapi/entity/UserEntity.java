@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import javax.persistence.*;
+
 import com.stockscreener.screenerapi.enums.Gender;
 import com.stockscreener.screenerapi.enums.UserRole;
 import com.stockscreener.screenerapi.enums.UserStatus;
@@ -24,7 +25,7 @@ public class UserEntity {
 	private String name;
     @Column(length = 100, unique = true)
     private String username;
-    @Column(unique = true, nullable = false)
+    @Column(unique = true)
     private String email;
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "ENUM('MALE', 'FEMALE', 'OTHER')")
@@ -50,15 +51,16 @@ public class UserEntity {
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "ENUM('ACTIVE', 'BLOCKED', 'DELETED') default 'ACTIVE'", nullable = false)
     private UserStatus status;
-    private Boolean isSubscribed;
+    @Column(nullable = false)
+    private Boolean isSubscribed = false;
 
     
 /*  Inverse side of Bidirectional entities */
     
-    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @OneToOne(mappedBy = "user", cascade = CascadeType.PERSIST)
     private InvestorEntity investor;
 
-    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @OneToOne(mappedBy = "user", cascade = CascadeType.PERSIST)
     private AdvisorEntity advisor;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
@@ -69,6 +71,12 @@ public class UserEntity {
     
     @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
     private List<FeedbackEntity> feedbacks;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
+    private List<BlogEntity> blogs;
+    
+    @OneToOne(mappedBy = "user", cascade = CascadeType.PERSIST)
+    private DeletedUserEntity deletedUser;
     
     /* Constructors and Methods */
     
@@ -77,6 +85,12 @@ public class UserEntity {
 		this.password=password2;
 		this.password=confirmpassword;
 		this.role=role2;
+	}
+	
+	public UserEntity(Long id, UserStatus status, UserRole role) {
+		this.id = id;
+		this.status = status;
+		this.role = role;
 	}
 	
 	public void addInvestor(InvestorEntity investor) {
@@ -103,4 +117,20 @@ public class UserEntity {
 		this.getFeedbacks().add(feedback);
 		feedback.setUser(this);
 	}
+	
+	public void deleteUser(DeletedUserEntity userToDelete) {
+		userToDelete.setEmail(this.email);
+		this.email = null;
+		userToDelete.setMobileNo(this.mobileNo);
+		this.mobileNo = null;
+		userToDelete.setUsername(this.username);
+		this.username = null;
+		userToDelete.setUser(this);
+		this.getScreens().forEach((screen)->screen.setAvailable(false));
+		this.getBlogs().forEach((blog)->blog.setAvailable(false));
+		userToDelete.setDeletedAt(LocalDateTime.now());
+		this.deletedUser = userToDelete;
+		this.setStatus(UserStatus.DELETED);
+	}
+	
 }

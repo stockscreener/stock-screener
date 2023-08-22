@@ -1,6 +1,8 @@
 package com.stockscreener.screenerapi.entity;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.persistence.*;
 
@@ -31,7 +33,13 @@ public class ScreenEntity {
 
 	    /* Inverse side of Bidirectional Entities */
 	    
-	    @OneToMany(mappedBy = "screen")
+	    @OneToMany(mappedBy = "screen", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	    private List<ScreenFilterEntity> screenFilters;
 	    
+	    /* Helper methods */
+	    
+	    public void addScreenFilters(List<ScreenFilterEntity> screenFilters) {
+	    	this.getScreenFilters().addAll(screenFilters);
+	    	screenFilters.forEach((filter)->filter.setScreen(this));
+	    }
 }

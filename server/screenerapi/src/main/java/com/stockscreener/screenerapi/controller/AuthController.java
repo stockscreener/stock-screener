@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.stockscreener.screenerapi.dto.AuthRequestDTO;
 import com.stockscreener.screenerapi.dto.AuthResponseDTO;
-import com.stockscreener.screenerapi.dto.RegisterUserReqDTO;
+import com.stockscreener.screenerapi.dto.user.RegisterUserReqDTO;
 import com.stockscreener.screenerapi.entity.UserEntity;
 import com.stockscreener.screenerapi.service.UserService;
 

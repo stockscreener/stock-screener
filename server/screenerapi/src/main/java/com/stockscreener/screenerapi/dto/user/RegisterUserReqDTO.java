@@ -1,4 +1,4 @@
-package com.stockscreener.screenerapi.dto;
+package com.stockscreener.screenerapi.dto.user;
 
 import javax.validation.constraints.*;
 

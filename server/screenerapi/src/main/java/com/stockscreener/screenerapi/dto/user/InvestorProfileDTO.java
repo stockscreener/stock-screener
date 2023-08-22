@@ -1,25 +1,25 @@
-package com.stockscreener.screenerapi.dto;
+package com.stockscreener.screenerapi.dto.user;
 
 import java.time.LocalDate;
 
-import javax.validation.constraints.NotNull;
+import javax.persistence.Column;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.validation.constraints.NotBlank;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
-import com.stockscreener.screenerapi.enums.AdvisorVerificationStatus;
 import com.stockscreener.screenerapi.enums.AnnualIncome;
 import com.stockscreener.screenerapi.enums.Gender;
 import com.stockscreener.screenerapi.enums.Industry;
 import com.stockscreener.screenerapi.enums.Occupation;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 @Getter
 @Setter
 @ToString
-public class AdvisorProfileDTO {
+public class InvestorProfileDTO {
 	@JsonProperty(access = Access.WRITE_ONLY)
 	private Long id;
 	private String name;
@@ -32,11 +32,7 @@ public class AdvisorProfileDTO {
     private String state;
     private String country;
     private Integer pincode;
-    private String registrationNo;
-    private LocalDate validTill;
-    private String about;
-    @JsonProperty(access = Access.READ_ONLY)
-    private AdvisorVerificationStatus verificationStatus;
-    @JsonProperty(access = Access.READ_ONLY)
-    private String verificationRemark;
+    private Occupation occupation;
+    private Industry industry;
+    private AnnualIncome annualIncome;
 }

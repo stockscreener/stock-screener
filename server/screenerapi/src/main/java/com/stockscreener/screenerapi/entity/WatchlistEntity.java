@@ -1,6 +1,7 @@
 package com.stockscreener.screenerapi.entity;
 
 import javax.persistence.*;
+
 import lombok.*;
 import java.util.List;
 

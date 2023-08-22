@@ -13,7 +13,15 @@ import lombok.*;
 public class DeletedUserEntity {
 	@Id
     private Long id;
+	
+	@Column(length = 100)
+    private String username;
 
+	@Column(length = 20)
+    private String mobileNo;
+	
+	private String email;
+	
     @Column(length = 255)
     private String reason;
     
@@ -24,5 +32,6 @@ public class DeletedUserEntity {
     @MapsId
     @JoinColumn(name = "id")
     private UserEntity user;
-
+    
+    
 }

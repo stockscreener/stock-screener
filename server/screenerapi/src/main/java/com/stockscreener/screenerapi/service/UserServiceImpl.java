@@ -2,35 +2,37 @@ package com.stockscreener.screenerapi.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-
-import javax.transaction.Transactional;
+import java.util.Map;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.stockscreener.screenerapi.customException.ResourceNotFoundException;
 import com.stockscreener.screenerapi.customException.UserDoesNotHaveProperPermission;
-import com.stockscreener.screenerapi.dto.AdminProfileDTO;
-import com.stockscreener.screenerapi.dto.AdvisorProfileDTO;
 import com.stockscreener.screenerapi.dto.ApiResponseDTO;
 import com.stockscreener.screenerapi.dto.AuthRequestDTO;
 import com.stockscreener.screenerapi.dto.AuthResponseDTO;
-import com.stockscreener.screenerapi.dto.InvestorProfileDTO;
-import com.stockscreener.screenerapi.dto.UpdatePasswordDTO;
+import com.stockscreener.screenerapi.dto.user.AdminProfileDTO;
+import com.stockscreener.screenerapi.dto.user.AdvisorProfileDTO;
+import com.stockscreener.screenerapi.dto.user.DeleteUserDTO;
+import com.stockscreener.screenerapi.dto.user.InvestorProfileDTO;
+import com.stockscreener.screenerapi.dto.user.LimitedUserDetailsDTO;
+import com.stockscreener.screenerapi.dto.user.UpdatePasswordDTO;
 import com.stockscreener.screenerapi.entity.AdvisorEntity;
+import com.stockscreener.screenerapi.entity.DeletedUserEntity;
 import com.stockscreener.screenerapi.entity.InvestorEntity;
 import com.stockscreener.screenerapi.entity.UserEntity;
 import com.stockscreener.screenerapi.enums.AdvisorVerificationStatus;
 import com.stockscreener.screenerapi.enums.UserRole;
 import com.stockscreener.screenerapi.enums.UserStatus;
-import com.stockscreener.screenerapi.repository.AdvisorRepository;
 import com.stockscreener.screenerapi.repository.UserRepository;
 
 
 @Service
 @Transactional
-public class UserServicesImpl implements UserService {
+public class UserServiceImpl implements UserService {
 	@Autowired
 	private UserRepository userRepository;
 	
@@ -58,16 +60,6 @@ public class UserServicesImpl implements UserService {
 		user.setStatus(UserStatus.ACTIVE);
 		UserEntity newUser = userRepository.save(user);
 		return newUser;
-	}
-
-	@Override
-	public ApiResponseDTO deleteUserDetails(Long id) {
-		UserEntity user=getUserDetails(id);
-		if(user.getStatus().equals(UserStatus.ACTIVE)){
-			user.setStatus(UserStatus.DELETED);
-			return new ApiResponseDTO("User Details Deleted Successfully....");
-		}
-		return new ApiResponseDTO("User Status Is Not Active....");
 	}
 
 	@Override
@@ -153,6 +145,50 @@ public class UserServicesImpl implements UserService {
 		}
 		userRepository.save(user);
 		return new ApiResponseDTO("Password Updated!");
+	}
+
+	@Override
+	public List<LimitedUserDetailsDTO> getLimitedUserDetails(Long userId, UserRole role) {
+		UserEntity user = userRepository.fetchUserStatusRole(userId).orElseThrow(()->new ResourceNotFoundException("Invalid User!"));
+		if(!user.getRole().equals(UserRole.ADMIN))
+			role = UserRole.ADVISOR;
+		return userRepository.fetchLimitedUserDetails(role);
+	}
+
+	@Override
+	public UserEntity getUserStatusRole(Long id) {
+		return userRepository.fetchUserStatusRole(id)
+				.orElseThrow(()->new ResourceNotFoundException("Invalid User!"));
+	}
+
+	@Override
+	public ApiResponseDTO deleteUser(DeleteUserDTO user) {
+		UserEntity userToDelete = userRepository.findById(user.getId())
+				.orElseThrow(()->new ResourceNotFoundException("Invalid User!"));
+		userToDelete.deleteUser(mapper.map(user, DeletedUserEntity.class));
+		return new ApiResponseDTO("User Deleted!");
+	}
+
+	@Override
+	public List<LimitedUserDetailsDTO> updateUsersStatus(Map<Long, UserStatus> usersStatus) {
+		List<UserEntity> users = userRepository.findByIdInAndStatusNot(
+				usersStatus.keySet().stream().toList(), UserStatus.DELETED);
+		users.forEach((u)->{
+				UserStatus st = usersStatus.get(u.getId());
+				if(st.equals(UserStatus.ACTIVE) || st.equals(UserStatus.BLOCKED)) {
+				u.setStatus(st);
+				u.getScreens().forEach(
+						(screen)->screen.setAvailable(st.equals(UserStatus.BLOCKED)?false:true));
+				u.getBlogs().forEach(
+						(blog)->blog.setAvailable(st.equals(UserStatus.BLOCKED)?false:true));
+				}
+			});
+		return users.stream().map((user)->{
+				LimitedUserDetailsDTO userDto = mapper.map(user, LimitedUserDetailsDTO.class);
+				if(user.getAdvisor()!= null)
+					userDto.setVerificationStatus(user.getAdvisor().getVerificationStatus());
+				return userDto;
+				}).toList();
 	}
 	
 

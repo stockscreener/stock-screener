@@ -3,6 +3,7 @@ package com.stockscreener.screenerapi.service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -172,7 +173,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public List<LimitedUserDetailsDTO> updateUsersStatus(Map<Long, UserStatus> usersStatus) {
 		List<UserEntity> users = userRepository.findByIdInAndStatusNot(
-				usersStatus.keySet().stream().toList(), UserStatus.DELETED);
+				usersStatus.keySet().stream().collect(Collectors.toList()), UserStatus.DELETED);
 		users.forEach((u)->{
 				UserStatus st = usersStatus.get(u.getId());
 				if(st.equals(UserStatus.ACTIVE) || st.equals(UserStatus.BLOCKED)) {
@@ -188,8 +189,7 @@ public class UserServiceImpl implements UserService {
 				if(user.getAdvisor()!= null)
 					userDto.setVerificationStatus(user.getAdvisor().getVerificationStatus());
 				return userDto;
-				}).toList();
+				}).collect(Collectors.toList());
 	}
-	
 
 }

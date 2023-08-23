@@ -1,5 +1,6 @@
 package com.stockscreener.screenerapi.service;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,7 +55,7 @@ public class AdminServiceImpl implements AdminService{
 	public List<StockAttributesDTO> updateVisibleStockAttributes(List<StockAttributesDTO> stockAttributes) {
 		return stockAttributeRepository.findAll().stream()
 				.map((stockAttribute)-> mapper.map(stockAttributes, StockAttributesDTO.class))
-				.toList();
+				.collect(Collectors.toList());
 	}
 	
 	

@@ -1,3 +1,4 @@
+
 package com.stockscreener.screenerapi.entity;
 
 import javax.persistence.*;

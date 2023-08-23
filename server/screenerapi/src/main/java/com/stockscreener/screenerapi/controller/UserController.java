@@ -1,6 +1,4 @@
 package com.stockscreener.screenerapi.controller;
-
-import java.lang.ProcessBuilder.Redirect;
 import java.util.List;
 
 import javax.validation.Valid;

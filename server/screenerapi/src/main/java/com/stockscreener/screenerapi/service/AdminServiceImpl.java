@@ -48,7 +48,7 @@ public class AdminServiceImpl implements AdminService{
 	public List<StockAttributesDTO> getAllStockAttributes(Long adminId) {
 		return stockAttributeRepository.findAll().stream()
 				.map((attribute)->mapper.map(attribute, StockAttributesDTO.class))
-				.toList();
+				.collect(Collectors.toList());
 	}
 
 	@Override

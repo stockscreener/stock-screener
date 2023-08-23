@@ -53,7 +53,8 @@ public class BlogServiceImpl implements BlogService {
         blogRepository.save(blogEntity);
         return "Blog created successfully.";
         
-        BlogEditReqDTO advisor;
+        
+		BlogEditReqDTO advisor;
 		UserEntity userEntity = userRepository.findById(advisor.getId()).orElseThrow(()->new ResourceNotFoundException("Invalid User"));
     	
         if(!userEntity.getRole().equals(UserRole.ADVISOR))

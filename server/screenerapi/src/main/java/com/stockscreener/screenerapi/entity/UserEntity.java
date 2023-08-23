@@ -16,7 +16,7 @@ import lombok.*;
 @Getter
 @Setter
 @NoArgsConstructor
-@ToString(exclude = {"password", "screens", "advisor", "investor", "watchlists", "feedbacks"})
+@ToString(exclude = {"password", "screens", "advisor", "investor", "watchlists", "feedbacks", "blogs", "deletedUser"})
 public class UserEntity {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

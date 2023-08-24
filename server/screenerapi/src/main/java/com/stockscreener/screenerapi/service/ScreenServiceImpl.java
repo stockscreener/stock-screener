@@ -12,16 +12,19 @@ import com.stockscreener.screenerapi.customException.BadRequestException;
 import com.stockscreener.screenerapi.customException.ResourceNotFoundException;
 import com.stockscreener.screenerapi.customException.UserDoesNotHaveProperPermission;
 import com.stockscreener.screenerapi.dto.ApiResponseDTO;
+import com.stockscreener.screenerapi.dto.StockAttributesDTO;
 import com.stockscreener.screenerapi.dto.screen.EditScreenDTO;
 import com.stockscreener.screenerapi.dto.screen.NewScreenDTO;
 import com.stockscreener.screenerapi.dto.screen.ScreenDTO;
 import com.stockscreener.screenerapi.dto.screen.ScreenFilterDTO;
 import com.stockscreener.screenerapi.entity.ScreenEntity;
 import com.stockscreener.screenerapi.entity.ScreenFilterEntity;
+import com.stockscreener.screenerapi.entity.StockAttributeEntity;
 import com.stockscreener.screenerapi.entity.UserEntity;
 import com.stockscreener.screenerapi.enums.UserRole;
 import com.stockscreener.screenerapi.enums.UserStatus;
 import com.stockscreener.screenerapi.repository.ScreenRepository;
+import com.stockscreener.screenerapi.repository.StockAttributeRepository;
 import com.stockscreener.screenerapi.repository.UserRepository;
 
 @Service
@@ -34,18 +37,20 @@ public class ScreenServiceImpl implements ScreenService{
 	private UserRepository userRepository;
 	@Autowired
 	private ModelMapper mapper;
+	@Autowired
+	private StockAttributeRepository stockAttributeRepository;
 	
 	@Override
-	public List<ScreenDTO> getAllScreens(Long userId) {
-		UserEntity user = userRepository.findById(userId)
-				.orElseThrow(()->new ResourceNotFoundException("Invalid User!"));
+	public List<ScreenDTO> getAllScreens() {
 		return screenRepository.findByIsAvailable(true).stream()
 						.map((screen)->{
 							ScreenDTO dto = mapper.map(screen, ScreenDTO.class);
-							dto.setUserName(screen.getUser().getUsername());
+							dto.setUsername(screen.getUser().getUsername());
 							return dto;})
 						.collect(Collectors.toList());
 	}
+	
+	
 
 	@Override
 	public List<ScreenDTO> getMyScreens(Long userId) {
@@ -133,7 +138,15 @@ public class ScreenServiceImpl implements ScreenService{
 		screenDTO.setUserId(screen.getUser().getId());
 		return screenDTO;
 	}
-	
+
+
+
+	@Override
+	public List<StockAttributesDTO> getStockAttributes() {
+		return stockAttributeRepository.findByIsVisible(true).stream()
+				.map((attribute)->mapper.map(attribute, StockAttributesDTO.class))
+				.toList();
+	}
 	
 	
 }

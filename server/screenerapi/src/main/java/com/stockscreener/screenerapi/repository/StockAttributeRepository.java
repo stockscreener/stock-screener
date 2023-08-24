@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import com.stockscreener.screenerapi.dto.StockAttributesDTO;
 import com.stockscreener.screenerapi.entity.StockAttributeEntity;
 
 public interface StockAttributeRepository extends JpaRepository<StockAttributeEntity, Long>{

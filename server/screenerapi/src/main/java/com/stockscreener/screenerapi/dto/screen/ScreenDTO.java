@@ -13,6 +13,6 @@ public class ScreenDTO {
 	private Long id;
     private String name;
     private String description;
-    private String userName;
+    private String username;
     private boolean isPremium;
 }

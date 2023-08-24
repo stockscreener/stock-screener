@@ -10,7 +10,7 @@ import lombok.*;
 public class StockAttributesDTO {
 	@NotNull
 	private Long id;
-    private String name;
+    private String displayName;
     @NotNull
     private boolean isVisible;
 }

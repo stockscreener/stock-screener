@@ -15,6 +15,9 @@ public class StockAttributeEntity {
 
     @Column(length = 100)
     private String name;
+    
+    @Column(length = 100)
+    private String displayName;
 
     private boolean isVisible;
 }

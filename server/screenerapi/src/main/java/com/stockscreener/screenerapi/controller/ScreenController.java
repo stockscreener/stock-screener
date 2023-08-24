@@ -21,8 +21,13 @@ public class ScreenController {
 	private ScreenService screenService;
 	
 	@GetMapping
-	public ResponseEntity<?> getAllScreens(@RequestParam Long userId){
-		return ResponseEntity.ok(screenService.getAllScreens(userId));
+	public ResponseEntity<?> getAllScreens(){
+		return ResponseEntity.ok(screenService.getAllScreens());
+	}
+	
+	@GetMapping("/attributes")
+	public ResponseEntity<?> getStockAttributes(){
+		return ResponseEntity.ok(screenService.getStockAttributes());
 	}
 	
 	@GetMapping("/myscreens")

@@ -5,6 +5,6 @@ export default axios.create({
   baseURL,
   headers: {
     'Content-Type': 'application/json',
-    'Authorization': sessionStorage['token']? 'Bearer '+ sessionStorage['token'] : "",
+    'Authorization': sessionStorage['token'] ? 'Bearer '+ sessionStorage['token'] : "",
   },
 });

@@ -72,6 +72,7 @@ public class ScreenServiceImpl implements ScreenService{
 		screen.setAvailable(true);
 		if(user.getRole().equals(UserRole.ROLE_INVESTOR))
 			screen.setPremium(false);
+		screen.setUser(user);
 		screen.addScreenFilters(
 				newScreen.getScreenFilters().stream()
 					.map((dto)->mapper.map(dto, ScreenFilterEntity.class))

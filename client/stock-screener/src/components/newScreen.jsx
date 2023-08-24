@@ -1,17 +1,25 @@
 import { useEffect, useState } from "react"
-import { getStockAttributes } from "../services/screen"
+import { addNewScreen, getStockAttributes } from "../services/screen"
 import { log } from "../utils/logger"
 import { toast } from "react-toastify"
+import { useSelector } from "react-redux"
 
 function NewScreen() {
-
+    const loginStatus = useSelector((state)=>state.auth.status)
     const [name, setName] = useState('')
     const [description, setDescription] = useState('')
     const [stockAttributes, setStockAttributes] = useState([])
+    const [screenFilters, setScreenFilters ] = useState([])
+    // {
+    //     "stockAttributeId": 0,
+    //     "filterConstraint": "EQUAL",
+    //     "value": 0,
+    //     "columnPosition": 0
+    //   }
+    const id = sessionStorage['id']
 
     useEffect(() => {
         log("in use effect of new screen")
-        debugger
         const fetchScreens = async () => {
             let response = await getStockAttributes();
             log(response);
@@ -25,7 +33,26 @@ function NewScreen() {
         fetchScreens();
     }, [])
 
-    return (<div className="container mt-5">
+
+    const saveScreen = async ()=>{
+        if(!loginStatus){
+            toast.warn("Login first to use this functionality!")
+        }else{
+        let response = await addNewScreen({
+            'userId':id,
+            name,
+            description,
+            screenFilters
+        });
+            log(response);
+            if (response && response.status === 200) {
+                toast(response.data.message)
+            }
+        }
+    }
+
+    return (<div className="container mt-2">
+        <h4 className="text-center mb-3">Create New Screen</h4>
         <div className="col-12">
             <div className="row mb-3">
                 <div className="col-md-3 col-lg-2">
@@ -77,7 +104,10 @@ function NewScreen() {
                     </div>
                 </div>
             })}</div>
-
+        </div>
+        <div className="m-2 text-center">
+            <button className="btn btn-secondary btn-lg me-3">Cancel</button>
+            <button className="btn btn-primary btn-lg" onClick={()=>saveScreen()}>Save</button>
         </div>
     </div>)
 }

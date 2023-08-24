@@ -37,7 +37,7 @@ function App() {
           <Route path="/screens/new" element={<NewScreen />}/>
         </Routes>
       </div>
-      <ToastContainer />
+      <ToastContainer autoClose={4000}/>
     </div>
   );
 }

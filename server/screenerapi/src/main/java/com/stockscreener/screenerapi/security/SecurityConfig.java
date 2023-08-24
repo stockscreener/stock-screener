@@ -3,6 +3,7 @@ package com.stockscreener.screenerapi.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -36,8 +37,10 @@ public class SecurityConfig {
 			.csrf().disable(). // disable CSRF to continue with REST APIs
 				authorizeRequests() // specify all authorization rules (i.e authorize all requests)
 				.antMatchers("/auth/signin", "/auth/signup",
-						"/screens", "/screens/attributes",
+						"/screens/attributes",
 						"/swagger*/**", "/v*/api-docs/**").permitAll()
+				.antMatchers("/screens").permitAll()
+//				.antMatchers(HttpMethod.POST, "/screens").authenticated()
 				.antMatchers("/products/purchase").hasRole("CUSTOMER")
 				.antMatchers("/admin/*").hasRole("ADMIN") 
 				.anyRequest().authenticated()

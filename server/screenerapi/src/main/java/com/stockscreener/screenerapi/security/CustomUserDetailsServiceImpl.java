@@ -22,7 +22,7 @@ public class CustomUserDetailsServiceImpl implements UserDetailsService {
 		// invoke repo's method to get user details form DB
 		UserEntity user = userRepo.findByEmail(email)
 				.orElseThrow(() ->
-				new UsernameNotFoundException("Invalid Email !!!!!"));
+				new UsernameNotFoundException("Invalid Credentials!"));
 		//=> user email exists
 		return new CustomUserDetails(user);
 	}

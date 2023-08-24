@@ -46,8 +46,10 @@ public class JWTRequestFilter extends OncePerRequestFilter {
 			//save above auth object in the spric sec ctx
 			SecurityContextHolder.getContext().setAuthentication(authentication);
 			
-		} else
+		} else {
+			System.out.println(request.getHeader("Authorization"));
 			System.out.println("req did not contain any bearer token");
+		}
 		filterChain.doFilter(request, response);// passing the control to the nexyt filter in the chain
 
 	}

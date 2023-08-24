@@ -1,4 +1,4 @@
-import { Profile, useEffect } from 'react'
+import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import './App.css'
 import { login } from './features/authSlice'
@@ -25,13 +25,12 @@ function App() {
   return (
     <div className=''>
       {/* navigation bar */}
-      {loginStatus && <NavigationBar />}
+      <ConditionalNavigationBar />
       <div className="container">
         <Routes>
           <Route path='/' element={<Screener />} />
           <Route path='/login' element={<Login />} />
           <Route path='/register' element={<Signup />}/>
-          <Route path="/profile" element={<Profile/>}
         </Routes>
       </div>
       <ToastContainer />

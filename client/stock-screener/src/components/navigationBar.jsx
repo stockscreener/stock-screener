@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import DropdownMenu from "./dropdownMenu";
 
 function NavigationBar() {
-    return <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+    return <nav className="navbar navbar-expand-sm navbar-dark bg-dark">
 
         <Link className="navbar-brand text-secondary ps-5" to="/"><b>Stock Screener</b></Link>
         <button className="navbar-toggler d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavId" aria-controls="collapsibleNavId"

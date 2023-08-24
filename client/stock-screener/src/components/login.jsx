@@ -1,5 +1,4 @@
 import { Link, useNavigate } from 'react-router-dom';
-import '../../node_modules/bootstrap/dist/css/bootstrap.css'
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { signinUserApi } from '../services/user';

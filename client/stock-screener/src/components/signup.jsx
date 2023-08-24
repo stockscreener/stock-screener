@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import '../../node_modules/bootstrap/dist/css/bootstrap.css';
 import { toast } from 'react-toastify';
 import { registerUserApi } from '../services/user'; // Assuming you have a registerUserApi function
 import { useDispatch, useSelector } from 'react-redux';

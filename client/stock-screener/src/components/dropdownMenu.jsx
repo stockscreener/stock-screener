@@ -1,10 +1,14 @@
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom"
+import { logout } from "../features/authSlice";
 
 function DropdownMenu() {
+    const loginStatus = useSelector((state)=>state.auth.status)
+    const dispatch = useDispatch()
     var role = sessionStorage.getItem("role");
     var logoutUser=()=>{
         sessionStorage.clear()
-
+        dispatch(logout())
     }
     
     switch (role) {
@@ -18,7 +22,7 @@ function DropdownMenu() {
                     <Link className="dropdown-item" to="/">Join Premium</Link>
                     <Link className="dropdown-item" to="/">Advisors</Link>
                     <Link className="dropdown-item" to="/">Support</Link>
-                    <Link className="dropdown-item" to="/login" onClick={logoutUser}>Logout</Link>
+                    <Link className="dropdown-item" to="/" onClick={logoutUser}>Logout</Link>
                 </div>
             </div>);
         case "ROLE_ADMIN":
@@ -31,7 +35,7 @@ function DropdownMenu() {
                     <Link className="dropdown-item" to="/">Manage Users</Link>
                     <Link className="dropdown-item" to="/">Statistics</Link>
                     <Link className="dropdown-item" to="/">Support</Link>
-                    <Link className="dropdown-item" to="/login" onClick={logoutUser}>Logout</Link>
+                    <Link className="dropdown-item" to="/" onClick={logoutUser}>Logout</Link>
                 </div>
             </div>);
         case "ROLE_ADVISOR":
@@ -44,12 +48,12 @@ function DropdownMenu() {
                     <Link className="dropdown-item" to="/">My Blogs</Link>
                     <Link className="dropdown-item" to="/">Join Premium</Link>
                     <Link className="dropdown-item" to="/">Support</Link>
-                    <Link className="dropdown-item" to="/login" onClick={logoutUser}>Logout</Link>
+                    <Link className="dropdown-item" to="/" onClick={logoutUser}>Logout</Link>
                 </div>
             </div>);
         default:
             return (<div className="nav-item dropdown text-light pe-5 me-5 pe-5">
-                <Link className="nav-link text-primary" to="/login" id="dropdownId" onClick={logoutUser}>logout</Link>
+                <a className="nav-link text-primary" href="/login" id="dropdownId">login</a>
             </div>);
     }
 }

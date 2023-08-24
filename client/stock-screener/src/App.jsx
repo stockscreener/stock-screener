@@ -22,20 +22,26 @@ function App() {
     }
   }, [])
 
-  return (
-    <div className=''>
-      {/* navigation bar */}
-      {loginStatus && <NavigationBar />}
-      <div className="container">
-        <Routes>
-          <Route path='/' element={<Screener />} />
-          <Route path='/login' element={<Login />} />
-          <Route path='/register' element={<Signup />}/>
-        </Routes>
-      </div>
-      <ToastContainer />
+  return (<div className="">
+    <Routes>
+      <Route path='*' element={<ConditionalNavigationBar />} />
+    </Routes>
+    <div className="container">
+      <Routes>
+        <Route path='/login' element={<Login />} />
+        <Route path='/register' element={<Signup />} />
+        <Route path='/' element={<Screener />} />
+      </Routes>
     </div>
+    <ToastContainer />
+  </div>
   );
+}
+
+function ConditionalNavigationBar() {
+  const isLoginOrSignup = window.location.pathname.includes('/login') || window.location.pathname.includes('/register');
+
+  return isLoginOrSignup ? null : <NavigationBar />;
 }
 
 export default App;

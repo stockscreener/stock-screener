@@ -3,16 +3,21 @@ import '../../node_modules/bootstrap/dist/css/bootstrap.css'
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { signinUserApi } from '../services/user';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { login } from '../features/authSlice';
 import { log } from '../utils/logger';
 
 function Login(){
+    const loginStatus = useSelector((state)=>state.auth.status)
     const navigate = useNavigate()
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-
     const dispatch = useDispatch()
+
+    if(loginStatus){
+        navigate("/")
+        return null
+    }
 
     const signinUser = async()=>{
 
@@ -58,7 +63,7 @@ function Login(){
                     onChange={(e)=>setPassword(e.target.value)}/>
                 </div>
                 <button className="btn btn-primary mb-3" onClick={signinUser}>Sign in</button>
-                <p className="">Don't have an Account? <Link to={"/register"}>Sign up</Link></p>
+                <p className="text-center">Don't have an Account? <Link to={"/register"}>Sign up</Link></p>
             </div>
         </div>
         <div className='col'></div>

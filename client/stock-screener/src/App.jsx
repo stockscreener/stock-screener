@@ -8,6 +8,7 @@ import { Route, Routes } from 'react-router-dom'
 import NavigationBar from './components/navigationBar'
 import Screener from './components/screener'
 import Login from './components/login'
+import Signup from './components/signup'
 
 function App() {
 
@@ -29,7 +30,11 @@ function App() {
         <Routes>
           <Route path='/' element={<Screener />} />
           <Route path='/login' element={<Login />} />
+<<<<<<< HEAD
           <Route path='/profile' element={<Profile/>} />
+=======
+          <Route path='/register' element={<Signup />}/>
+>>>>>>> 99c3774e4b1f6158c8a77ad4ba3f7bee782bc504
         </Routes>
       </div>
       <ToastContainer />

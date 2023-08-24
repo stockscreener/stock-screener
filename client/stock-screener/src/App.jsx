@@ -9,6 +9,7 @@ import NavigationBar from './components/navigationBar'
 import Screener from './components/screener'
 import Login from './components/login'
 import Signup from './components/signup'
+import UserProfile from './components/profile'
 
 function App() {
 
@@ -31,6 +32,7 @@ function App() {
           <Route path='/' element={<Screener />} />
           <Route path='/login' element={<Login />} />
           <Route path='/register' element={<Signup />}/>
+          <Route path='/profile' element={<UserProfile />} />
         </Routes>
       </div>
       <ToastContainer />

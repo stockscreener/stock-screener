@@ -10,8 +10,7 @@ import Screener from './components/screener'
 import Login from './components/login'
 import Signup from './components/signup'
 import ChangePasswordPage from './components/changePassword'
-
-
+import FeedbackForm from './feedback'
 function App() {
 
   const loginStatus = useSelector((state) => state.auth.status)
@@ -33,8 +32,8 @@ function App() {
           <Route path='/' element={<Screener />} />
           <Route path='/login' element={<Login />} />
           <Route path='/register' element={<Signup />}/>
-        
           <Route path='/changePassword' element={<ChangePasswordPage />}/>
+          <Route path='/feedback' element={<FeedbackForm/>}/>
 </Routes>
       </div>
       <ToastContainer />

@@ -65,7 +65,7 @@ public class ScreenServiceImpl implements ScreenService{
 			throw new BadRequestException("You have been Blocked by Admin!");
 		ScreenEntity screen = screenRepository.save(mapper.map(newScreen, ScreenEntity.class));
 		screen.setAvailable(true);
-		if(user.getRole().equals(UserRole.INVESTOR))
+		if(user.getRole().equals(UserRole.ROLE_INVESTOR))
 			screen.setPremium(false);
 		screen.addScreenFilters(
 				newScreen.getScreenFilters().stream()

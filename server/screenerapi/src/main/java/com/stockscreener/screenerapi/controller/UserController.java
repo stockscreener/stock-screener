@@ -52,12 +52,12 @@ public class UserController {
 	@GetMapping("/profile")
 	public ResponseEntity<?> getProfile(@RequestParam Long userId){
 		UserEntity user = userService.getUserProfile(userId);
-		if(user.getRole().equals(UserRole.INVESTOR)) {
+		if(user.getRole().equals(UserRole.ROLE_INVESTOR)) {
 			InvestorProfileDTO investor = new InvestorProfileDTO();
 			mapper.map(user, investor);
 			mapper.map(user.getInvestor(), investor);
 			return ResponseEntity.ok(investor);
-		}else if(user.getRole().equals(UserRole.ADVISOR)){
+		}else if(user.getRole().equals(UserRole.ROLE_ADVISOR)){
 			AdvisorProfileDTO advisor = new AdvisorProfileDTO();
 			mapper.map(user, advisor);
 			mapper.map(user.getAdvisor(), advisor);

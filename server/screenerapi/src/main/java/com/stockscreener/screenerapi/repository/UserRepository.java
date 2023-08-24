@@ -28,5 +28,7 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 	Optional<UserEntity> fetchUserStatusRole(Long id);
 	
 	List<UserEntity> findByIdInAndStatusNot(List<Long> ids, UserStatus deleted);
+	
+	Optional<UserEntity> findByEmail(String email);
 
 }

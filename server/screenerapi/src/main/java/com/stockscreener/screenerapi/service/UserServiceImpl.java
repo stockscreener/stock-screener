@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,6 +39,9 @@ public class UserServiceImpl implements UserService {
 	private UserRepository userRepository;
 	
 	@Autowired
+	private PasswordEncoder encoder;
+	
+	@Autowired
 	private ModelMapper mapper;
 	
 	@Override
@@ -53,12 +57,15 @@ public class UserServiceImpl implements UserService {
 			advisor = new AdvisorEntity();
 			advisor.setVerificationStatus(AdvisorVerificationStatus.NOT_VERIFIED);
 			user.addAdvisor(advisor);
-			user.setRole(UserRole.ADVISOR);
+			user.setRole(UserRole.ROLE_ADVISOR);
 		}else {
-			user.setRole(UserRole.INVESTOR);
+			user.setRole(UserRole.ROLE_INVESTOR);
 		}
 		user.setRegisteredAt(LocalDateTime.now());
 		user.setStatus(UserStatus.ACTIVE);
+		String rawPassword = user.getPassword();
+		String encodedPassword = encoder.encode(rawPassword);
+		user.setPassword(encodedPassword);
 		UserEntity newUser = userRepository.save(user);
 		return newUser;
 	}
@@ -70,20 +77,21 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public AuthResponseDTO authenticateUser(AuthRequestDTO request) {
-		UserEntity user=userRepository.findByEmailAndPassword(request.getUsername(),request.getPassword())
-				.orElseThrow(()->new ResourceNotFoundException("Invalid Username Or Password..."));		
+		UserEntity user=userRepository.findByEmail(request.getUsername())
+				.orElseThrow(()->new ResourceNotFoundException("Invalid Username Or Password..."));
+		AuthResponseDTO response = new AuthResponseDTO();
 		if(user.getStatus().equals(UserStatus.ACTIVE)) {
-			return mapper.map(user, AuthResponseDTO.class);
+			mapper.map(user, response);
 		}else if(user.getStatus().equals(UserStatus.BLOCKED)) {
-			return mapper.map(user, AuthResponseDTO.class);
+			response.setMessage("You have Been Blocked by the Admin!");
 		}
-		return new AuthResponseDTO();
+		return response;
 	}
 
 	@Override
 	public AdminProfileDTO updateAdminProfile(AdminProfileDTO admin) {
 		UserEntity userEntity = userRepository.findById(admin.getId()).orElseThrow(()->new ResourceNotFoundException("Invalid User"));
-		if(!userEntity.getRole().equals(UserRole.ADMIN))
+		if(!userEntity.getRole().equals(UserRole.ROLE_ADMIN))
 			throw new UserDoesNotHaveProperPermission("You cannot update profile of this user!");
 		mapper.map(admin, userEntity);
 		return mapper.map(userRepository.save(userEntity),AdminProfileDTO.class);
@@ -92,7 +100,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public AdvisorProfileDTO updateAdvisorProfile(AdvisorProfileDTO advisor) {
 		UserEntity userEntity = userRepository.findById(advisor.getId()).orElseThrow(()->new ResourceNotFoundException("Invalid User"));
-		if(!userEntity.getRole().equals(UserRole.ADVISOR))
+		if(!userEntity.getRole().equals(UserRole.ROLE_ADVISOR))
 			throw new UserDoesNotHaveProperPermission("You cannot update profile of this user!");
 		
 		mapper.map(advisor, userEntity);
@@ -110,7 +118,7 @@ public class UserServiceImpl implements UserService {
 	public InvestorProfileDTO updateInvestorProfile(InvestorProfileDTO investor) {
 		
 		UserEntity userEntity = userRepository.findById(investor.getId()).orElseThrow(()->new ResourceNotFoundException("Invalid User"));
-		if(!userEntity.getRole().equals(UserRole.INVESTOR))
+		if(!userEntity.getRole().equals(UserRole.ROLE_INVESTOR))
 			throw new UserDoesNotHaveProperPermission("You cannot update profile of this user!");
 		
 		mapper.map(investor, userEntity);
@@ -129,9 +137,9 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public UserEntity getUserProfile(Long userId) {
 		UserEntity user = userRepository.findById(userId).orElseThrow(()->new ResourceNotFoundException("Invalid User!"));
-		if(user.getRole().equals(UserRole.INVESTOR))
+		if(user.getRole().equals(UserRole.ROLE_INVESTOR))
 			user.getInvestor();
-		else if (user.getRole().equals(UserRole.ADVISOR))
+		else if (user.getRole().equals(UserRole.ROLE_ADVISOR))
 			user.getAdvisor();
 		return user;
 	}
@@ -139,8 +147,8 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public ApiResponseDTO updatePassword(UpdatePasswordDTO passwordDto) {
 		UserEntity user = userRepository.findById(passwordDto.getId()).orElseThrow(()->new ResourceNotFoundException("Invalid User!"));
-		if(user.getPassword().equals(passwordDto.getCurrentPassword())) {
-			user.setPassword(passwordDto.getNewPassword());
+		if(encoder.matches(passwordDto.getCurrentPassword(), user.getPassword())) {
+			user.setPassword(encoder.encode(passwordDto.getNewPassword()));
 		}else {
 			return new ApiResponseDTO("Invalid Password!");
 		}
@@ -151,8 +159,8 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public List<LimitedUserDetailsDTO> getLimitedUserDetails(Long userId, UserRole role) {
 		UserEntity user = userRepository.fetchUserStatusRole(userId).orElseThrow(()->new ResourceNotFoundException("Invalid User!"));
-		if(!user.getRole().equals(UserRole.ADMIN))
-			role = UserRole.ADVISOR;
+		if(!user.getRole().equals(UserRole.ROLE_ADMIN))
+			role = UserRole.ROLE_ADVISOR;
 		return userRepository.fetchLimitedUserDetails(role);
 	}
 

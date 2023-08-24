@@ -43,7 +43,7 @@ public class UserEntity {
     @Column(nullable = false)
     private String password;
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "ENUM('INVESTOR', 'ADVISOR', 'ADMIN') default 'INVESTOR'", nullable = false)
+    @Column(columnDefinition = "ENUM('ROLE_INVESTOR', 'ROLE_ADVISOR', 'ROLE_ADMIN') default 'ROLE_INVESTOR'", nullable = false)
     private UserRole role;
     @Column(columnDefinition = "DATETIME default CURRENT_TIMESTAMP")
     private LocalDateTime registeredAt;

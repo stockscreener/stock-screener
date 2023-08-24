@@ -1,5 +1,5 @@
 package com.stockscreener.screenerapi.enums;
 
 public enum UserRole {
-	INVESTOR, ADVISOR, ADMIN
+	ROLE_INVESTOR, ROLE_ADVISOR, ROLE_ADMIN
 }

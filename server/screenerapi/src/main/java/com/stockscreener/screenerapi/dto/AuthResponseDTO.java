@@ -1,5 +1,6 @@
 package com.stockscreener.screenerapi.dto;
 
+import com.stockscreener.screenerapi.enums.UserRole;
 import com.stockscreener.screenerapi.enums.UserStatus;
 
 import lombok.*;
@@ -12,4 +13,9 @@ import lombok.*;
 public class AuthResponseDTO {	
 	private Long id;
 	private UserStatus status;
+	private String message;
+	private String token;
+	private String name;
+	private UserRole role;
+	private String username;	
 }

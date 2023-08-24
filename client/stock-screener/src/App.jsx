@@ -8,6 +8,7 @@ import { Route, Routes } from 'react-router-dom'
 import NavigationBar from './components/navigationBar'
 import Screener from './components/screener'
 import Login from './components/login'
+import CreateBlog from './components/CreateBlog'
 
 function App() {
 
@@ -29,6 +30,7 @@ function App() {
         <Routes>
           <Route path='/' element={<Screener />} />
           <Route path='/login' element={<Login />} />
+          <Route path='/createblog' element={<CreateBlog />} />
         </Routes>
       </div>
       <ToastContainer />

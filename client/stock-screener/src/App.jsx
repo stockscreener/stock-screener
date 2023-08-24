@@ -9,6 +9,8 @@ import NavigationBar from './components/navigationBar'
 import Screener from './components/screener'
 import Login from './components/login'
 import Signup from './components/signup'
+import ChangePasswordPage from './components/changePassword'
+
 
 function App() {
 
@@ -31,7 +33,9 @@ function App() {
           <Route path='/' element={<Screener />} />
           <Route path='/login' element={<Login />} />
           <Route path='/register' element={<Signup />}/>
-        </Routes>
+        
+          <Route path='/changePassword' element={<ChangePasswordPage />}/>
+</Routes>
       </div>
       <ToastContainer />
     </div>

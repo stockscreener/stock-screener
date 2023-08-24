@@ -46,9 +46,6 @@ public class AuthController {
 	
 	@PostMapping("/signup")
 	public ResponseEntity<?> registerUser(@RequestBody @Valid RegisterUserReqDTO user){
-		if(!user.getPassword().equals(user.getConfirmPassword())) {
-			return ResponseEntity.badRequest().body("Passwords do not match!");
-		}
 		return ResponseEntity.status(HttpStatus.CREATED)
 				.body(mapper.map(
 								userService.addNewUser(mapper.map(user, UserEntity.class), user.isAdvisor()),

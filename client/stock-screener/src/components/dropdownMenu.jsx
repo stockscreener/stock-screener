@@ -4,6 +4,7 @@ function DropdownMenu() {
     var role = sessionStorage.getItem("role");
     var logoutUser=()=>{
         sessionStorage.clear()
+
     }
     
     switch (role) {

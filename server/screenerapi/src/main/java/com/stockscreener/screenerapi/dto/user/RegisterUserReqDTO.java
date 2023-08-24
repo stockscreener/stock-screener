@@ -17,7 +17,5 @@ public class RegisterUserReqDTO {
 	private String email;
 	@NotBlank
 	private String password;
-	@NotBlank
-	private String confirmPassword;
 	private boolean advisor; 
 }

@@ -15,3 +15,17 @@ export async function signinUserApi(uri, data){
 
     }
 }
+
+export async function registerUserApi(uri, data){
+    var response = null
+    try{
+        response = await axiosCall.post(uri, data);
+        log(response.data);
+        return response
+    }catch(ex){
+        log(ex)
+        toast.error(ex.response.data.message)
+        return ex.response.data;
+
+    }
+}

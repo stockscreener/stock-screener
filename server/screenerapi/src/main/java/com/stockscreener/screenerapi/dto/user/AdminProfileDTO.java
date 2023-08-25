@@ -10,8 +10,6 @@ import lombok.*;
 @Getter
 @Setter
 public class AdminProfileDTO {
-	@JsonProperty(access = Access.WRITE_ONLY)
-	private Long id;
 	private String name;
     private String username;
     private String email;

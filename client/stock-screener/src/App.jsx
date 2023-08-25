@@ -11,6 +11,7 @@ import Login from './components/login'
 import Signup from './components/signup'
 import Screens from './components/screens'
 import NewScreen from './components/newScreen'
+import UserProfile from './components/profile'
 
 function App() {
 
@@ -35,6 +36,7 @@ function App() {
           <Route path='/register' element={<Signup />}/>
           <Route path="/screens" element={<Screens />}/>
           <Route path="/screens/new" element={<NewScreen />}/>
+          <Route path="/profile" element={<UserProfile/>}/>
         </Routes>
       </div>
       <ToastContainer autoClose={4000}/>

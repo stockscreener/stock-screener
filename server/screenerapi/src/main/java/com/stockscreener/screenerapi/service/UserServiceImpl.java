@@ -30,6 +30,7 @@ import com.stockscreener.screenerapi.enums.AdvisorVerificationStatus;
 import com.stockscreener.screenerapi.enums.UserRole;
 import com.stockscreener.screenerapi.enums.UserStatus;
 import com.stockscreener.screenerapi.repository.UserRepository;
+import com.stockscreener.screenerapi.utils.AuthUtils;
 
 
 @Service
@@ -59,6 +60,7 @@ public class UserServiceImpl implements UserService {
 			user.addAdvisor(advisor);
 			user.setRole(UserRole.ROLE_ADVISOR);
 		}else {
+			user.addInvestor(new InvestorEntity());
 			user.setRole(UserRole.ROLE_INVESTOR);
 		}
 		user.setRegisteredAt(LocalDateTime.now());
@@ -90,7 +92,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public AdminProfileDTO updateAdminProfile(AdminProfileDTO admin) {
-		UserEntity userEntity = userRepository.findById(admin.getId()).orElseThrow(()->new ResourceNotFoundException("Invalid User"));
+		UserEntity userEntity = userRepository.findById(AuthUtils.customUserDetails().getUserId()).orElseThrow(()->new ResourceNotFoundException("Invalid User"));
 		if(!userEntity.getRole().equals(UserRole.ROLE_ADMIN))
 			throw new UserDoesNotHaveProperPermission("You cannot update profile of this user!");
 		mapper.map(admin, userEntity);
@@ -99,7 +101,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public AdvisorProfileDTO updateAdvisorProfile(AdvisorProfileDTO advisor) {
-		UserEntity userEntity = userRepository.findById(advisor.getId()).orElseThrow(()->new ResourceNotFoundException("Invalid User"));
+		UserEntity userEntity = userRepository.findById(AuthUtils.customUserDetails().getUserId()).orElseThrow(()->new ResourceNotFoundException("Invalid User"));
 		if(!userEntity.getRole().equals(UserRole.ROLE_ADVISOR))
 			throw new UserDoesNotHaveProperPermission("You cannot update profile of this user!");
 		
@@ -117,15 +119,12 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public InvestorProfileDTO updateInvestorProfile(InvestorProfileDTO investor) {
 		
-		UserEntity userEntity = userRepository.findById(investor.getId()).orElseThrow(()->new ResourceNotFoundException("Invalid User"));
+		UserEntity userEntity = userRepository.findById(AuthUtils.customUserDetails().getUserId()).orElseThrow(()->new ResourceNotFoundException("Invalid User"));
 		if(!userEntity.getRole().equals(UserRole.ROLE_INVESTOR))
 			throw new UserDoesNotHaveProperPermission("You cannot update profile of this user!");
 		
-		mapper.map(investor, userEntity);
-		
-		InvestorEntity updatedInvestor = mapper.map(investor, InvestorEntity.class);
-		userEntity.addInvestor(updatedInvestor);
-		
+		mapper.map(investor, userEntity);		
+		mapper.map(investor, userEntity.getInvestor());
 		UserEntity savedUser = userRepository.save(userEntity);
 		
 		InvestorProfileDTO investorDTO = new InvestorProfileDTO();

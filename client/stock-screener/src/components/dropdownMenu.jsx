@@ -3,9 +3,10 @@ import { Link } from "react-router-dom"
 import { logout } from "../features/authSlice";
 
 function DropdownMenu() {
-    const loginStatus = useSelector((state)=>state.auth.status)
+    const authSlice = useSelector((state)=>state.auth)
+    const optionalName = "Set Your Name in Profile"
     const dispatch = useDispatch()
-    var role = sessionStorage.getItem("role");
+    var role = authSlice.role
     var logoutUser=()=>{
         sessionStorage.clear()
         dispatch(logout())
@@ -14,9 +15,9 @@ function DropdownMenu() {
     switch (role) {
         case "ROLE_INVESTOR":
             return (<div className="nav-item dropdown text-light pe-5 me-5 pe-5 ms-4">
-                <Link className="nav-link dropdown-toggle" to="/" id="dropdownId" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">User Name</Link>
+                <Link className="nav-link dropdown-toggle" to="/" id="dropdownId" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{authSlice.name != 'null'?authSlice.name : optionalName}</Link>
                 <div className="dropdown-menu p-3 pe-5 border border-secondary border-3" aria-labelledby="dropdownId">
-                    <Link className="dropdown-item" to="/editprofile">Profile</Link>
+                    <Link className="dropdown-item" to="/profile">Profile</Link>
                     <Link className="dropdown-item" to="/">Watchlists</Link>
                     <Link className="dropdown-item" to="/">My Screens</Link>
                     <Link className="dropdown-item" to="/">Join Premium</Link>
@@ -27,9 +28,9 @@ function DropdownMenu() {
             </div>);
         case "ROLE_ADMIN":
             return (<div className="nav-item dropdown text-light pe-5 me-5 pe-5 ms-4">
-                <Link className="nav-link dropdown-toggle" to="/" id="dropdownId" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Admin Name</Link>
+                <Link className="nav-link dropdown-toggle" to="/" id="dropdownId" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{authSlice.name != 'null'?authSlice.name : optionalName}</Link>
                 <div className="dropdown-menu p-3 pe-5 border border-secondary border-3" aria-labelledby="dropdownId">
-                    <Link className="dropdown-item" to="/editprofile">Profile</Link>
+                    <Link className="dropdown-item" to="/profile">Profile</Link>
                     <Link className="dropdown-item" to="/">Manage Visible Stocks</Link>
                     <Link className="dropdown-item" to="/">Manage Stock Details</Link>
                     <Link className="dropdown-item" to="/">Manage Users</Link>
@@ -40,9 +41,9 @@ function DropdownMenu() {
             </div>);
         case "ROLE_ADVISOR":
             return (<div className="nav-item dropdown text-light pe-5 me-5 pe-5 ms-4">
-                <Link className="nav-link dropdown-toggle" to="/" id="dropdownId" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Advisor Name</Link>
+                <Link className="nav-link dropdown-toggle" to="/" id="dropdownId" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{authSlice.name != 'null'?authSlice.name : optionalName}</Link>
                 <div className="dropdown-menu p-3 pe-5 border border-secondary border-3" aria-labelledby="dropdownId">
-                    <Link className="dropdown-item" to="/editprofile">Profile</Link>
+                    <Link className="dropdown-item" to="/profile">Profile</Link>
                     <Link className="dropdown-item" to="/">Watchlists</Link>
                     <Link className="dropdown-item" to="/">My Screens</Link>
                     <Link className="dropdown-item" to="/">My Blogs</Link>

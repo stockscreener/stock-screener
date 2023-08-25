@@ -28,6 +28,11 @@ public class GlobalExceptionHandler {
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponseDTO(excption.getMessage()));
 	}
 	
+	@ExceptionHandler(BlockedByAdminException.class)
+	public ResponseEntity<?> handleBlockedByAdminException(BlockedByAdminException exception){
+		return ResponseEntity.status(HttpStatus.DESTINATION_LOCKED).body(exception.getMessage());
+	}
+	
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<?> handleException(Exception exception){
 		exception.printStackTrace();

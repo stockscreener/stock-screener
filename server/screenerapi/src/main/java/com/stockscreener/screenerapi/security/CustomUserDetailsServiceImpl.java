@@ -8,22 +8,25 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.stockscreener.screenerapi.customException.BlockedByAdminException;
 import com.stockscreener.screenerapi.entity.UserEntity;
+import com.stockscreener.screenerapi.enums.UserStatus;
 import com.stockscreener.screenerapi.repository.UserRepository;
 
 @Service
 @Transactional
 public class CustomUserDetailsServiceImpl implements UserDetailsService {
 	@Autowired
-	private UserRepository userRepo;
+	private UserRepository userRepository;
 
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-		// invoke repo's method to get user details form DB
-		UserEntity user = userRepo.findByEmail(email)
+		UserEntity user = userRepository.findByEmail(email)
 				.orElseThrow(() ->
 				new UsernameNotFoundException("Invalid Credentials!"));
-		//=> user email exists
+		if(user.getStatus().equals(UserStatus.BLOCKED)){
+			throw new BlockedByAdminException("You have been Blocked by the Admin!");
+		}
 		return new CustomUserDetails(user);
 	}
 

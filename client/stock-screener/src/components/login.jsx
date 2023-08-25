@@ -5,6 +5,7 @@ import { signinUserApi } from '../services/user';
 import { useDispatch, useSelector } from 'react-redux';
 import { login } from '../features/authSlice';
 import { log } from '../utils/logger';
+import axiosCall from '../utils/axios-call';
 
 function Login(){
     const loginStatus = useSelector((state)=>state.auth.status)
@@ -25,10 +26,9 @@ function Login(){
         }else if(password.length === 0){
             toast.error("Enter Password!")
         }else{
-            const response = await signinUserApi("/auth/signin", {email, password})
+            const response = await signinUserApi({email, password})
             log(response)
             if(response['status'] === 200){
-                dispatch(login())
                 if(response.data.status === 'ACTIVE'){
                     toast.success("Login Success")
                     sessionStorage.setItem("id", response.data.id)
@@ -36,6 +36,8 @@ function Login(){
                     sessionStorage.setItem("username",response.data.username)
                     sessionStorage.setItem("token",response.data.token)
                     sessionStorage.setItem("role", response.data.role)
+                    dispatch(login())
+                    axiosCall.defaults.headers.Authorization = 'Bearer '+response.data.token
                     navigate("/")
                 }else{
                     toast.error("You have been Blocked by the Admin!")

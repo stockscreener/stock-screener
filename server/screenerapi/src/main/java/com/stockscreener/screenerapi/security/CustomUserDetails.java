@@ -8,8 +8,10 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.stockscreener.screenerapi.entity.UserEntity;
+import com.stockscreener.screenerapi.enums.UserRole;
 
 public class CustomUserDetails implements UserDetails {
+	private static final long serialVersionUID = 1L;
 	private UserEntity user;
 	
 	public CustomUserDetails(UserEntity user) {
@@ -21,7 +23,15 @@ public class CustomUserDetails implements UserDetails {
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return List.of(new SimpleGrantedAuthority(user.getRole().name()));
 	}
-
+	
+	public Long getUserId() {
+		return user.getId();
+	}
+	
+	public UserRole getUserRole() {
+		return user.getRole();
+	}
+	
 	@Override
 	public String getPassword() {
 		return user.getPassword();

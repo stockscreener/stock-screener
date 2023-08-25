@@ -20,8 +20,6 @@ import lombok.ToString;
 @Setter
 @ToString
 public class AdvisorProfileDTO {
-	@JsonProperty(access = Access.WRITE_ONLY)
-	private Long id;
 	private String name;
     private String username;
     private String email;

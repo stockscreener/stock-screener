@@ -20,8 +20,6 @@ import lombok.*;
 @Setter
 @ToString
 public class InvestorProfileDTO {
-	@JsonProperty(access = Access.WRITE_ONLY)
-	private Long id;
 	private String name;
     private String username;
     private String email;

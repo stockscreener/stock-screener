@@ -27,7 +27,7 @@ function Signup() {
         } else if (password !== confirmPassword) {
             toast.error("Passwords don't match!");
         } else {
-            const response = await registerUserApi('/auth/signup', {
+            const response = await registerUserApi({
                 email,
                 password,
                 'advisor':isAdvisor,

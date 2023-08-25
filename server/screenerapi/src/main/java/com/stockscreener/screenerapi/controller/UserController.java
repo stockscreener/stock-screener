@@ -1,19 +1,16 @@
 package com.stockscreener.screenerapi.controller;
 
-import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import com.stockscreener.screenerapi.dto.ApiResponseDTO;
-import com.stockscreener.screenerapi.dto.AuthRequestDTO;
 import com.stockscreener.screenerapi.dto.user.AdminProfileDTO;
 import com.stockscreener.screenerapi.dto.user.AdvisorProfileDTO;
 import com.stockscreener.screenerapi.dto.user.DeleteUserDTO;
@@ -21,16 +18,16 @@ import com.stockscreener.screenerapi.dto.user.InvestorProfileDTO;
 import com.stockscreener.screenerapi.dto.user.UpdatePasswordDTO;
 import com.stockscreener.screenerapi.dto.user.VerifyAdvisorDTO;
 import com.stockscreener.screenerapi.entity.UserEntity;
-import com.stockscreener.screenerapi.enums.AdvisorVerificationStatus;
 import com.stockscreener.screenerapi.enums.UserRole;
 import com.stockscreener.screenerapi.enums.UserStatus;
 import com.stockscreener.screenerapi.service.AdvisorService;
 import com.stockscreener.screenerapi.service.UserService;
+import com.stockscreener.screenerapi.utils.AuthUtils;
 
 
 @RestController
 @RequestMapping("/users")
-@CrossOrigin(origins="*")
+@CrossOrigin("*")
 @Validated
 public class UserController {	
 	@Autowired
@@ -50,8 +47,8 @@ public class UserController {
 	
 	// Get profile of any user
 	@GetMapping("/profile")
-	public ResponseEntity<?> getProfile(@RequestParam Long userId){
-		UserEntity user = userService.getUserProfile(userId);
+	public ResponseEntity<?> getProfile(){
+		UserEntity user = userService.getUserProfile(AuthUtils.customUserDetails().getUserId());
 		if(user.getRole().equals(UserRole.ROLE_INVESTOR)) {
 			InvestorProfileDTO investor = new InvestorProfileDTO();
 			mapper.map(user, investor);
@@ -75,7 +72,6 @@ public class UserController {
 	// update profile for investor
 	@PutMapping("/investor/profile")
 	public ResponseEntity<?> updateInvestorProfile(@RequestBody @Valid InvestorProfileDTO investor){
-		System.out.println(investor);
 		return ResponseEntity.ok(userService.updateInvestorProfile(investor));
 	}
 	

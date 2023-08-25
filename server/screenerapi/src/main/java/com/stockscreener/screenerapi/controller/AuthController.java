@@ -16,8 +16,8 @@ import com.stockscreener.screenerapi.dto.AuthRequestDTO;
 import com.stockscreener.screenerapi.dto.AuthResponseDTO;
 import com.stockscreener.screenerapi.dto.user.RegisterUserReqDTO;
 import com.stockscreener.screenerapi.entity.UserEntity;
-import com.stockscreener.screenerapi.jwt_utils.JwtUtils;
 import com.stockscreener.screenerapi.service.UserService;
+import com.stockscreener.screenerapi.utils.JwtUtils;
 
 @RestController
 @RequestMapping("/auth")

@@ -1,4 +1,4 @@
-package com.stockscreener.screenerapi.jwt_utils;
+package com.stockscreener.screenerapi.utils;
 
 import java.security.Key;
 import java.util.Collection;
@@ -41,31 +41,33 @@ public class JwtUtils {
 		key = Keys.hmacShaKeyFor(jwtSecret.getBytes());
 	}
 
-	// will be invoked by Authentication controller) , upon successful
-	// authentication
+	// will be invoked by Authentication controller , upon successful authentication
 	public String generateJwtToken(Authentication authentication) {
 		log.info("generate jwt token " + authentication);
 		CustomUserDetails userPrincipal = (CustomUserDetails) authentication.getPrincipal();
-//JWT : userName,issued at ,exp date,digital signature(does not typically contain password , can contain authorities
+		//JWT : userName,issued at ,exp date,digital signature(does not typically contain password , can contain authorities
 		return Jwts.builder() // JWTs : a Factory class , used to create JWT tokens
-				.setSubject((userPrincipal.getUsername())) // setting subject part of the token(typically user
-															// name/email)
-				.setIssuedAt(new Date())// Sets the JWT Claims iat (issued at) value of current date
-				.setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))// Sets the JWT Claims exp
-																					// (expiration) value.
-				// setting a custom claim
+				.setSubject((userPrincipal.getUsername())) // setting subject part of the token(typically user name/email)
+				.claim("userId", userPrincipal.getUserId())
 				.claim("authorities", getAuthoritiesInString(userPrincipal.getAuthorities()))
-				.signWith(key, SignatureAlgorithm.HS512) // Signs the constructed JWT using the specified
-															// algorithm with the specified key, producing a
-															// JWS(Json web signature=signed JWT)
-
-				// Using token signing algo : HMAC using SHA-512
-				.compact();// Actually builds the JWT and serializes it to a compact, URL-safe string
+				.claim("role", userPrincipal.getUserRole())
+				.setIssuedAt(new Date())
+				.setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))				
+				.signWith(key, SignatureAlgorithm.HS512) // HMAC using SHA-512
+				.compact();
 	}
 
 	// this method will be invoked by our custom JWT filter
 	public String getUserNameFromJwtToken(Claims claims) {
 		return claims.getSubject();
+	}
+	
+	public Long getUserIdFromJwtToken(Claims claims) {
+	    return claims.get("userId", Long.class);
+	}
+
+	public String getUserRoleFromJwtToken(Claims claims) {
+	    return claims.get("role", String.class);
 	}
 
 	// this method will be invoked by our custom filter

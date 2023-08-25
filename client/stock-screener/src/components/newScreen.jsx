@@ -37,6 +37,10 @@ function NewScreen() {
     const saveScreen = async ()=>{
         if(!loginStatus){
             toast.warn("Login first to use this functionality!")
+        }else if(name.length === 0 ){
+            toast.error("Enter a Screen Name!")
+        }else if(description.length === 0){
+            toast.error("Enter some Description!")
         }else{
         let response = await addNewScreen({
             'userId':id,

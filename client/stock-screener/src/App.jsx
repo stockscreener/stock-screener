@@ -9,6 +9,8 @@ import NavigationBar from './components/navigationBar'
 import Screener from './components/screener'
 import Login from './components/login'
 import CreateBlog from './components/CreateBlog'
+import BlogList from './components/BlogList';
+import EditBlog from './components/EditBlog';
 
 function App() {
 
@@ -31,6 +33,9 @@ function App() {
           <Route path='/' element={<Screener />} />
           <Route path='/login' element={<Login />} />
           <Route path='/createblog' element={<CreateBlog />} />
+          <Route exact path='/bloglist' element={<BlogList />}/>
+          <Route path='/edit/:id' element={<EditBlog />}/>
+          <Route path='/delete/:id' element={<DeleteBlog />} />
         </Routes>
       </div>
       <ToastContainer />

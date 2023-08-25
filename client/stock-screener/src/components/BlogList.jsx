@@ -1,36 +1,32 @@
-import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
-import { fetchBlogs } from '../redux/actions/blogActions';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
-function BlogList({ blogs, loading, error, fetchBlogs }) {
+function BlogList() {
+  const [blogs, setBlogs] = useState([]);
+
   useEffect(() => {
-    fetchBlogs();
-  }, [fetchBlogs]);
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
+    // Fetch all blogs when the component mounts
+    axios.get('/api/blogs') // Replace with your API endpoint
+      .then((response) => {
+        setBlogs(response.data);
+      })
+      .catch((error) => {
+        console.error('Error fetching blogs:', error);
+      });
+  }, []);
 
   return (
     <div>
       <h2>Blog List</h2>
       <ul>
         {blogs.map((blog) => (
-          <li key={blog.id}>{blog.title}</li>
+          <li key={blog.id}>
+            <a href={`/edit/${blog.id}`}>{blog.title}</a>
+          </li>
         ))}
       </ul>
     </div>
   );
 }
 
-const mapStateToProps = (state) => ({
-  blogs: state.blog.blogs,
-  loading: state.blog.loading,
-  error: state.blog.error,
-});
-
-export default connect(mapStateToProps, { fetchBlogs })(BlogList);
+export default BlogList;

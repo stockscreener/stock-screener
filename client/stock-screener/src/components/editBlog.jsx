@@ -1,20 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { connect } from 'react-redux';
-import { editBlog } from '../redux/actions/blogActions';
+import axios from 'axios';
 
-function EditBlog({ blog, editBlog }) {
+function EditBlog({ match }) {
   const [blogData, setBlogData] = useState({
-    title: blog.title,
-    content: blog.content,
+    title: '',
+    content: '',
   });
 
   useEffect(() => {
-    // Update the component state when the blog prop changes
-    setBlogData({
-      title: blog.title,
-      content: blog.content,
-    });
-  }, [blog]);
+    // Fetch the blog data when the component mounts
+    axios.get(`/api/blogs/${match.params.id}`) // Replace with your API endpoint
+      .then((response) => {
+        setBlogData(response.data);
+      })
+      .catch((error) => {
+        console.error('Error fetching blog:', error);
+      });
+  }, [match.params.id]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -23,9 +25,15 @@ function EditBlog({ blog, editBlog }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Dispatch the editBlog action
-    editBlog({ ...blogData, id: blog.id });
-    // Redirect or perform other actions after editing the blog
+    // Send a PUT request to update the blog
+    axios.put(`/api/blogs/${match.params.id}`, blogData) // Replace with your API endpoint
+      .then((response) => {
+        console.log('Blog updated successfully:', response.data);
+        // Redirect or perform other actions after updating the blog
+      })
+      .catch((error) => {
+        console.error('Error updating blog:', error);
+      });
   };
 
   return (
@@ -46,13 +54,4 @@ function EditBlog({ blog, editBlog }) {
   );
 }
 
-const mapStateToProps = (state, ownProps) => {
-  // Assuming that the blog data is passed as props
-  const blogId = ownProps.match.params.id; // Assuming you use react-router to get the blog id from the URL
-  const blog = state.blog.blogs.find((blog) => blog.id === parseInt(blogId));
-  return {
-    blog,
-  };
-};
-
-export default connect(mapStateToProps, { editBlog })(EditBlog);
+export default EditBlog;

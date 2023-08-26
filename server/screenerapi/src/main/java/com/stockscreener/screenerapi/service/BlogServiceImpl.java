@@ -49,17 +49,19 @@ public class BlogServiceImpl implements BlogService {
         blogEntity.setUser(userRepository.findById(newBlogReqDTO.getUserId()).orElse(null));
         blogEntity.setAvailable(true);
 
+        // Check user permissions
+        BlogEditReqDTO advisor = null; //You need to initialize this with a valid value
+        @SuppressWarnings("null")
+		UserEntity userEntity = userRepository.findById(advisor.getId()).orElseThrow(()->new ResourceNotFoundException("Invalid User"));
+
+        if (!userEntity.getRole().equals(UserRole.ADVISOR))
+            throw new UserDoesNotHaveProperPermission("Permission denied. Only Advisors can create blogs.");
+
         // Save the blog to the repository
         blogRepository.save(blogEntity);
         return "Blog created successfully.";
-        
-        
-		BlogEditReqDTO advisor;
-		UserEntity userEntity = userRepository.findById(advisor.getId()).orElseThrow(()->new ResourceNotFoundException("Invalid User"));
-    	
-        if(!userEntity.getRole().equals(UserRole.ADVISOR))
-        	throw new UserDoesNotHaveProperPermission("Permission denied. Only Advisors can create blogs.");
     }
+
 
     @Override
     public List<BlogRespDTO> fetchAllBlogs() {
@@ -85,6 +87,13 @@ public class BlogServiceImpl implements BlogService {
 
     @Override
     public String editMyBlog(BlogEditReqDTO blogEditReqDTO) {
+        // Check if the user has the proper permissions to edit blogs
+        UserEntity userEntity = userRepository.findById(blogEditReqDTO.getUserId()).orElseThrow(() -> new ResourceNotFoundException("Invalid User"));
+
+        if (!userEntity.getRole().equals(UserRole.ADVISOR)) {
+            throw new UserDoesNotHaveProperPermission("Permission denied. Only Advisors can edit blogs.");
+        }
+
         // Fetch the blog to edit and check if it's available
         BlogEntity blogEntity = blogRepository.findByIdAndIsAvailable(blogEditReqDTO.getId(), true)
                 .orElseThrow(() -> new IllegalArgumentException("Blog not found or not available for editing."));
@@ -94,18 +103,19 @@ public class BlogServiceImpl implements BlogService {
 
         // Save the edited blog
         blogRepository.save(blogEntity);
-        return "Blog edited successfully.";
 
-        BlogEditReqDTO advisor;
-		UserEntity userEntity = userRepository.findById(advisor.getId()).orElseThrow(()->new ResourceNotFoundException("Invalid User"));
-    	
-        if(!userEntity.getRole().equals(UserRole.ADVISOR))
-        	throw new UserDoesNotHaveProperPermission("Permission denied. Only Advisors can edit blogs.");
-    
+        return "Blog edited successfully.";
     }
 
     @Override
     public String deleteMyBlog(Long blogId) {
+        // Check if the user has the proper permissions to delete blogs
+        UserEntity userEntity = userRepository.findById(blogId).orElseThrow(() -> new ResourceNotFoundException("Invalid User"));
+
+        if (!userEntity.getRole().equals(UserRole.ADVISOR)) {
+            throw new UserDoesNotHaveProperPermission("Permission denied. Only Advisors can delete blogs.");
+        }
+
         // Fetch the blog to delete and check if it's available
         BlogEntity blogEntity = blogRepository.findByIdAndIsAvailable(blogId, true)
                 .orElseThrow(() -> new IllegalArgumentException("Blog not found or not available for deletion."));
@@ -117,14 +127,8 @@ public class BlogServiceImpl implements BlogService {
         blogRepository.save(blogEntity);
 
         return "Blog deleted successfully.";
-        
-        BlogEditReqDTO advisor;
-		UserEntity userEntity = userRepository.findById(advisor.getId()).orElseThrow(()->new ResourceNotFoundException("Invalid User"));
-    	
-        if(!userEntity.getRole().equals(UserRole.ADVISOR))
-        	throw new UserDoesNotHaveProperPermission("Permission denied. Only Advisors can delete blogs.");
-    
     }
+
 
     private BlogRespDTO convertToBlogRespDTO(BlogEntity blogEntity) {
         // Convert a BlogEntity to a BlogRespDTO
@@ -132,4 +136,12 @@ public class BlogServiceImpl implements BlogService {
         BeanUtils.copyProperties(blogEntity, blogRespDTO);
         return blogRespDTO;
     }
+    //getter&setter for mapper
+	public ModelMapper getMapper() {
+		return mapper;
+	}
+
+	public void setMapper(ModelMapper mapper) {
+		this.mapper = mapper;
+	}
 }

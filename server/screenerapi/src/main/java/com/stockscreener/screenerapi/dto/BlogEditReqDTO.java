@@ -14,9 +14,9 @@ public class BlogEditReqDTO {
     private boolean isPremium;
     private boolean isAvailable;
 
-	public Long getId() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+//	public Long getId() {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
 	
 }

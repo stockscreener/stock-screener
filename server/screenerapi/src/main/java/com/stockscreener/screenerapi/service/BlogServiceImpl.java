@@ -40,6 +40,15 @@ public class BlogServiceImpl implements BlogService {
 
     @Override
     public String createBlog(NewBlogReqDTO newBlogReqDTO) {
+    	
+        // Check user permissions
+        BlogEditReqDTO advisor = new BlogEditReqDTO(); //You need to initialize this with a valid value
+        
+		UserEntity userEntity = userRepository.findById(advisor.getId()).orElseThrow(()->new ResourceNotFoundException("Invalid User"));
+
+        if (!userEntity.getRole().equals(UserRole.ADVISOR))
+            throw new UserDoesNotHaveProperPermission("Permission denied. Only Advisors can create blogs.");
+        
         // Create a new BlogEntity and copy properties from the DTO
         BlogEntity blogEntity = new BlogEntity();
         BeanUtils.copyProperties(newBlogReqDTO, blogEntity);
@@ -49,13 +58,7 @@ public class BlogServiceImpl implements BlogService {
         blogEntity.setUser(userRepository.findById(newBlogReqDTO.getUserId()).orElse(null));
         blogEntity.setAvailable(true);
 
-        // Check user permissions
-        BlogEditReqDTO advisor = null; //You need to initialize this with a valid value
-        @SuppressWarnings("null")
-		UserEntity userEntity = userRepository.findById(advisor.getId()).orElseThrow(()->new ResourceNotFoundException("Invalid User"));
-
-        if (!userEntity.getRole().equals(UserRole.ADVISOR))
-            throw new UserDoesNotHaveProperPermission("Permission denied. Only Advisors can create blogs.");
+  
 
         // Save the blog to the repository
         blogRepository.save(blogEntity);

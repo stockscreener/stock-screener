@@ -47,7 +47,7 @@ function Login(){
         }
     }
     return <div className='container p-5 mt-5 col-md-5'>
-        <div className='col'></div>
+        <div className='col'><a href="/">Home</a></div>
         <div className='col'>
             <div className='card shadow text-dark p-5'>
             <h2 className='text-center'>Sign in</h2>

@@ -12,6 +12,7 @@ import Signup from './components/signup'
 import Screens from './components/screens'
 import NewScreen from './components/newScreen'
 import UserProfile from './components/profile'
+import UpdatePassword from './components/updatePassword'
 
 function App() {
 
@@ -28,7 +29,7 @@ function App() {
   return (
     <div className=''>
       {/* navigation bar */}
-      <ConditionalNavigationBar />
+      <ConditionalNavigationBar loginStatus={loginStatus}/>
       <div className="container">
         <Routes>
           <Route path='/' element={<Screener />} />
@@ -37,17 +38,18 @@ function App() {
           <Route path="/screens" element={<Screens />}/>
           <Route path="/screens/new" element={<NewScreen />}/>
           <Route path="/profile" element={<UserProfile/>}/>
+          <Route path="/profile/password" element={<UpdatePassword/>}/>
         </Routes>
       </div>
-      <ToastContainer autoClose={4000}/>
+      <ToastContainer autoClose={4000} position='bottom-right'/>
     </div>
   );
 }
 
-function ConditionalNavigationBar() {
+function ConditionalNavigationBar(loginStatus) {
   const isLoginOrSignup = window.location.pathname.includes('/login') || window.location.pathname.includes('/register');
 
-  return isLoginOrSignup ? null : <NavigationBar />;
+  return isLoginOrSignup && loginStatus ? null : <NavigationBar />;
 }
 
 export default App;

@@ -83,8 +83,6 @@ public class UserController {
 	
 	@PutMapping("/password")
 	public ResponseEntity<?> updatePassword(@RequestBody @Valid UpdatePasswordDTO passwordDto){
-		if(!passwordDto.getNewPassword().equals(passwordDto.getConfirmPassword()))
-			return ResponseEntity.badRequest().body(new ApiResponseDTO("New Password and Confirm Password Must Match!"));
 		return ResponseEntity.ok(userService.updatePassword(passwordDto));
 	}
 	

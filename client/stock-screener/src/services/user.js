@@ -52,3 +52,16 @@ export async function saveUserProfile(uri, data){
 
     }
 }
+
+export async function updatePasswordApi(data){
+    try{
+        let response = await axiosCall.put("/users/password", data);
+        log(response.data);
+        return response
+    }catch(ex){
+        log(ex)
+        toast.error(ex.message)
+        return ex.response;
+
+    }
+}

@@ -145,14 +145,15 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public ApiResponseDTO updatePassword(UpdatePasswordDTO passwordDto) {
-		UserEntity user = userRepository.findById(passwordDto.getId()).orElseThrow(()->new ResourceNotFoundException("Invalid User!"));
+		
+		UserEntity user = userRepository.findById(AuthUtils.customUserDetails().getUserId()).orElseThrow(()->new ResourceNotFoundException("Invalid User!"));
 		if(encoder.matches(passwordDto.getCurrentPassword(), user.getPassword())) {
 			user.setPassword(encoder.encode(passwordDto.getNewPassword()));
 		}else {
-			return new ApiResponseDTO("Invalid Password!");
+			return new ApiResponseDTO("error","Wrong Password!");
 		}
 		userRepository.save(user);
-		return new ApiResponseDTO("Password Updated!");
+		return new ApiResponseDTO("success", "Password Updated!");
 	}
 
 	@Override

@@ -39,7 +39,7 @@ public class SecurityConfig {
 				.antMatchers("/auth/signin", "/auth/signup",
 						"/screens/attributes", "/screens", "/**",
 						"/swagger*/**", "/v*/api-docs/**").permitAll()
-				.antMatchers("/users/profile").hasAnyRole("ADMIN", "INVESTOR", "ADVISOR")
+				.antMatchers("/users/profile").authenticated()
 				.anyRequest().authenticated()
 				.and().sessionManagement() // configure HttpSession management
 				// DO NOT use HttpSession for storing any session info

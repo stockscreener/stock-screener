@@ -29,6 +29,7 @@ function NavigationBar() {
                 </div>
             </nav>
             <DropdownMenu />
+            <div className="col-1"></div>
         </div>
 
     </nav>

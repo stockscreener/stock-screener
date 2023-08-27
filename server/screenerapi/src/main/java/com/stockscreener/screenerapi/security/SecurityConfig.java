@@ -37,8 +37,9 @@ public class SecurityConfig {
 			.csrf().disable(). // disable CSRF to continue with REST APIs
 				authorizeRequests() // specify all authorization rules (i.e authorize all requests)
 				.antMatchers("/auth/signin", "/auth/signup",
-						"/screens/attributes", "/screens", "/**",
+						"/screens/attributes", "/screens",
 						"/swagger*/**", "/v*/api-docs/**").permitAll()
+				.antMatchers("/users/short").hasRole("ADMIN")
 				.antMatchers("/users/profile").authenticated()
 				.anyRequest().authenticated()
 				.and().sessionManagement() // configure HttpSession management

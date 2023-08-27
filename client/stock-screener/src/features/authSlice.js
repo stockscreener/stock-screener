@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { log } from "../utils/logger";
 
 export const authSlice = createSlice({
     name: 'auth',
@@ -12,6 +13,7 @@ export const authSlice = createSlice({
     },
     reducers: {
         login: (state) => {
+            log("login")
             state.status =  true;
             state.id = sessionStorage['id'];
             state.name = sessionStorage['name'];

@@ -28,7 +28,7 @@ public interface UserService {
 	ApiResponseDTO deleteUser(DeleteUserDTO user);
 	AuthResponseDTO authenticateUser(AuthRequestDTO request);
 	ApiResponseDTO updatePassword(UpdatePasswordDTO passwordDto);
-	List<LimitedUserDetailsDTO> getLimitedUserDetails(Long userId, UserRole role);
+	List<LimitedUserDetailsDTO> getLimitedUserDetails(UserRole role);
 	UserEntity getUserStatusRole(Long id);
 	List<LimitedUserDetailsDTO> updateUsersStatus(Map<Long, UserStatus> usersStatus);
 	

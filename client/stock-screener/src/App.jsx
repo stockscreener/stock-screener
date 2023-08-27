@@ -13,10 +13,15 @@ import Screens from './components/screens'
 import NewScreen from './components/newScreen'
 import UserProfile from './components/profile'
 import UpdatePassword from './components/updatePassword'
+import VisibleStocks from './components/admin/visibleStocks';
+import VisibleStockDetails from './components/admin/visibleStockDetails'
+import ManageUsers from './components/admin/manageUsers'
+
 
 function App() {
 
-  const loginStatus = useSelector((state) => state.auth.status)
+  const navState = useSelector((state) => state.navbar.visible)
+  const navUpdate = useSelector((state)=>state.navbar.update)
   const dispatch = useDispatch()
 
 
@@ -29,7 +34,7 @@ function App() {
   return (
     <div className=''>
       {/* navigation bar */}
-      <ConditionalNavigationBar loginStatus={loginStatus}/>
+      <ConditionalNavigationBar navState={navState} navUpdate={navUpdate}/>
       <div className="container">
         <Routes>
           <Route path='/' element={<Screener />} />
@@ -39,6 +44,9 @@ function App() {
           <Route path="/screens/new" element={<NewScreen />}/>
           <Route path="/profile" element={<UserProfile/>}/>
           <Route path="/profile/password" element={<UpdatePassword/>}/>
+          <Route path="/admin/stocks" element={<VisibleStocks />}/> 
+          <Route path="/admin/details" element={<VisibleStockDetails />}/> 
+          <Route path="/admin/users" element={<ManageUsers />}/> 
         </Routes>
       </div>
       <ToastContainer autoClose={4000} position='bottom-right'/>
@@ -46,10 +54,9 @@ function App() {
   );
 }
 
-function ConditionalNavigationBar(loginStatus) {
-  const isLoginOrSignup = window.location.pathname.includes('/login') || window.location.pathname.includes('/register');
-
-  return isLoginOrSignup && loginStatus ? null : <NavigationBar />;
+function ConditionalNavigationBar(props) {
+  const isLoginOrSignup = window.location.pathname.includes('/login') || window.location.pathname.includes('/register');  
+  return isLoginOrSignup ? null : <NavigationBar />;
 }
 
 export default App;

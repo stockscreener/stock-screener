@@ -157,8 +157,8 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public List<LimitedUserDetailsDTO> getLimitedUserDetails(Long userId, UserRole role) {
-		UserEntity user = userRepository.fetchUserStatusRole(userId).orElseThrow(()->new ResourceNotFoundException("Invalid User!"));
+	public List<LimitedUserDetailsDTO> getLimitedUserDetails(UserRole role) {
+		UserEntity user = userRepository.fetchUserStatusRole(AuthUtils.customUserDetails().getUserId()).orElseThrow(()->new ResourceNotFoundException("Invalid User!"));
 		if(!user.getRole().equals(UserRole.ROLE_ADMIN))
 			role = UserRole.ROLE_ADVISOR;
 		return userRepository.fetchLimitedUserDetails(role);

@@ -3,11 +3,12 @@ import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { registerUserApi } from '../services/user'; // Assuming you have a registerUserApi function
 import { useDispatch, useSelector } from 'react-redux';
-import { login } from '../features/authSlice';
 import { log } from '../utils/logger';
+import { showNavbar } from '../features/navbarSlice';
 
 function Signup() {
     const loginStatus = useSelector((state)=>state.auth.status)
+    const dispatch = useDispatch()
     const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -41,7 +42,7 @@ function Signup() {
     };
 
     return (<div className="container p-5 mt-5 col-md-5">
-            <div className="col"><a href="/">Home</a></div>
+            <div className="col"><Link to={"/"} onClick={()=>dispatch(showNavbar())}>Home</Link></div>
             <div className="col">
                 <div className="card shadow text-dark p-5">
                     <h2 className="text-center">Sign up</h2>

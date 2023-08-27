@@ -65,3 +65,17 @@ export async function updatePasswordApi(data){
 
     }
 }
+
+export async function getLimitedUserDetails(role){
+    try{
+        let response = await axiosCall.get("/users/short?role="+ role);
+        log(response.data);
+        return response
+    }catch(ex){
+        log(ex)
+        toast.error(ex.message)
+        return ex.response;
+
+    }
+}
+

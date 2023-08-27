@@ -41,8 +41,8 @@ public class UserController {
 	
 	// get limited user details
 	@GetMapping("/short")
-	public ResponseEntity<?> getAllUsersLimitedDetails(@RequestParam Long userId, @RequestParam UserRole role){
-		return ResponseEntity.ok(userService.getLimitedUserDetails(userId, role));
+	public ResponseEntity<?> getAllUsersLimitedDetails(@RequestParam UserRole role){
+		return ResponseEntity.ok(userService.getLimitedUserDetails(role));
 	}
 	
 	// Get profile of any user

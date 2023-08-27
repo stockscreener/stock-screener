@@ -2,22 +2,17 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { signinUserApi } from '../services/user';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { login } from '../features/authSlice';
 import { log } from '../utils/logger';
 import axiosCall from '../utils/axios-call';
+import { showNavbar } from '../features/navbarSlice';
 
 function Login(){
-    const loginStatus = useSelector((state)=>state.auth.status)
     const navigate = useNavigate()
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const dispatch = useDispatch()
-
-    if(loginStatus){
-        navigate("/")
-        return null
-    }
 
     const signinUser = async()=>{
 
@@ -37,6 +32,7 @@ function Login(){
                     sessionStorage.setItem("token",response.data.token)
                     sessionStorage.setItem("role", response.data.role)
                     dispatch(login())
+                    dispatch(showNavbar())
                     axiosCall.defaults.headers.Authorization = 'Bearer '+response.data.token
                     navigate("/")
                 }else{
@@ -47,7 +43,7 @@ function Login(){
         }
     }
     return <div className='container p-5 mt-5 col-md-5'>
-        <div className='col'><a href="/">Home</a></div>
+        <div className='col'><Link to={"/"} onClick={()=>dispatch(showNavbar())}>Home</Link></div>
         <div className='col'>
             <div className='card shadow text-dark p-5'>
             <h2 className='text-center'>Sign in</h2>

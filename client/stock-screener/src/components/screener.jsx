@@ -3,7 +3,6 @@ import { DataGrid } from '@mui/x-data-grid';
 import { log } from '../utils/logger';
 
 
-
 function Screener() {
     const [rowData, setRowData] = React.useState([]); // Initialize rows as an empty array  
     
@@ -85,8 +84,7 @@ function Screener() {
           }}
           pageSizeOptions={[5, 10]}
           //checkboxSelection
-        />
-         
+        /> 
       </div>
     );
   }

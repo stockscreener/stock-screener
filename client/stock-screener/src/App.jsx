@@ -46,7 +46,7 @@ function App() {
           <Route path="/profile/password" element={<UpdatePassword/>}/>
           <Route path="/admin/stocks" element={<VisibleStocks />}/> 
           <Route path="/admin/details" element={<VisibleStockDetails />}/> 
-          <Route path="/admin/users" element={<ManageUsers />}/> 
+          <Route path="/admin/users" element={<ManageUsers />}/>
         </Routes>
       </div>
       <ToastContainer autoClose={4000} position='bottom-right'/>

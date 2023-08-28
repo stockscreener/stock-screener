@@ -22,8 +22,8 @@ function Login(){
             toast.error("Enter Password!")
         }else{
             const response = await signinUserApi({email, password})
-            log(response)
-            if(response['status'] === 200){
+
+            if(response && response['status'] === 200){
                 if(response.data.status === 'ACTIVE'){
                     toast.success("Login Success")
                     sessionStorage.setItem("id", response.data.id)

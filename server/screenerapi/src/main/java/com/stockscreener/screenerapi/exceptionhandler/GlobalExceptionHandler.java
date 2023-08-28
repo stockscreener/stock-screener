@@ -4,6 +4,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
@@ -30,9 +31,15 @@ public class GlobalExceptionHandler {
 	
 	@ExceptionHandler(BlockedByAdminException.class)
 	public ResponseEntity<?> handleBlockedByAdminException(BlockedByAdminException exception){
-		return ResponseEntity.status(HttpStatus.DESTINATION_LOCKED).body(exception.getMessage());
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
 	}
 	
+	@ExceptionHandler(BadCredentialsException.class)
+	public ResponseEntity<?> handleBadCredentialsException(BadCredentialsException exception){
+		exception.printStackTrace();
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+				.body(new ApiResponseDTO(exception.getMessage()));
+	}
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<?> handleException(Exception exception){
 		exception.printStackTrace();

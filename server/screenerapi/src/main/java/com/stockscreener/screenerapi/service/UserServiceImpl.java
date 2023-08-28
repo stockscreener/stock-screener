@@ -16,6 +16,7 @@ import com.stockscreener.screenerapi.customException.UserDoesNotHaveProperPermis
 import com.stockscreener.screenerapi.dto.ApiResponseDTO;
 import com.stockscreener.screenerapi.dto.AuthRequestDTO;
 import com.stockscreener.screenerapi.dto.AuthResponseDTO;
+import com.stockscreener.screenerapi.dto.FeedbackRespDTO;
 import com.stockscreener.screenerapi.dto.user.AdminProfileDTO;
 import com.stockscreener.screenerapi.dto.user.AdvisorProfileDTO;
 import com.stockscreener.screenerapi.dto.user.DeleteUserDTO;
@@ -24,6 +25,7 @@ import com.stockscreener.screenerapi.dto.user.LimitedUserDetailsDTO;
 import com.stockscreener.screenerapi.dto.user.UpdatePasswordDTO;
 import com.stockscreener.screenerapi.entity.AdvisorEntity;
 import com.stockscreener.screenerapi.entity.DeletedUserEntity;
+import com.stockscreener.screenerapi.entity.FeedbackEntity;
 import com.stockscreener.screenerapi.entity.InvestorEntity;
 import com.stockscreener.screenerapi.entity.UserEntity;
 import com.stockscreener.screenerapi.enums.AdvisorVerificationStatus;
@@ -172,9 +174,21 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public ApiResponseDTO deleteUser(DeleteUserDTO user) {
-		UserEntity userToDelete = userRepository.findById(user.getId())
+		UserEntity deleteUser = userRepository.findById(AuthUtils.customUserDetails().getUserId())
 				.orElseThrow(()->new ResourceNotFoundException("Invalid User!"));
-		userToDelete.deleteUser(mapper.map(user, DeletedUserEntity.class));
+		DeletedUserEntity userToDelete = new DeletedUserEntity();
+		userToDelete.setEmail(deleteUser.getEmail());
+		deleteUser.setEmail(null);
+		userToDelete.setMobileNo(deleteUser.getMobileNo());
+		deleteUser.setMobileNo(null);
+		userToDelete.setUsername(deleteUser.getUsername());
+		deleteUser.setUsername(null);
+		userToDelete.setUser(deleteUser);
+		deleteUser.getScreens().forEach((screen)->screen.setAvailable(false));
+		deleteUser.getBlogs().forEach((blog)->blog.setAvailable(false));
+		userToDelete.setDeletedAt(LocalDateTime.now());
+		deleteUser.setDeletedUser(userToDelete);
+		deleteUser.setStatus(UserStatus.DELETED);
 		return new ApiResponseDTO("User Deleted!");
 	}
 
@@ -198,6 +212,16 @@ public class UserServiceImpl implements UserService {
 					userDto.setVerificationStatus(user.getAdvisor().getVerificationStatus());
 				return userDto;
 				}).collect(Collectors.toList());
+	}
+
+	@Override
+	public String saveFeedback(FeedbackRespDTO feedback) {
+		UserEntity user = userRepository.findById(AuthUtils.customUserDetails().getUserId()).orElseThrow(()->new ResourceNotFoundException("No User Found!"));
+		FeedbackEntity feedbackEntity = new FeedbackEntity();
+		feedbackEntity.setReview(feedback.getReview());
+		feedbackEntity.setReviewedAt(LocalDateTime.now());
+		user.addFeedback(feedbackEntity);
+		return "Feedback Submitted!";
 	}
 
 }

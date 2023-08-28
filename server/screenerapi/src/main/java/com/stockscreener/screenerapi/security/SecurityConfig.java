@@ -34,12 +34,13 @@ public class SecurityConfig {
 				(request, resp, exc) -> 
 				resp.sendError(HttpStatus.UNAUTHORIZED.value(), "Not yet authenticated"))
 				.and()
-			.csrf().disable(). // disable CSRF to continue with REST APIs
-				authorizeRequests() // specify all authorization rules (i.e authorize all requests)
+				.csrf().disable() // disable CSRF to continue with REST APIs
+				.authorizeRequests() // specify all authorization rules (i.e authorize all requests)
+				.antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 				.antMatchers("/auth/signin", "/auth/signup",
 						"/screens/attributes", "/screens",
 						"/swagger*/**", "/v*/api-docs/**").permitAll()
-				.antMatchers("/users/short").hasRole("ADMIN")
+				.antMatchers("/users/short", "users/disable", "/admin/attributes").hasRole("ADMIN")
 				.antMatchers("/users/profile").authenticated()
 				.anyRequest().authenticated()
 				.and().sessionManagement() // configure HttpSession management

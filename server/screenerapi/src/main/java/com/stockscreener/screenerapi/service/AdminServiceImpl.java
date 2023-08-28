@@ -12,6 +12,7 @@ import org.springframework.web.client.RestTemplate;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.stockscreener.screenerapi.dto.StockAttributesDTO;
 import com.stockscreener.screenerapi.dto.StocksListDTO;
+import com.stockscreener.screenerapi.entity.StockAttributeEntity;
 import com.stockscreener.screenerapi.repository.StockAttributeRepository;
 
 import lombok.*;
@@ -45,7 +46,7 @@ public class AdminServiceImpl implements AdminService{
 	}
 
 	@Override
-	public List<StockAttributesDTO> getAllStockAttributes(Long adminId) {
+	public List<StockAttributesDTO> getAllStockAttributes() {
 		return stockAttributeRepository.findAll().stream()
 				.map((attribute)->mapper.map(attribute, StockAttributesDTO.class))
 				.collect(Collectors.toList());
@@ -53,9 +54,18 @@ public class AdminServiceImpl implements AdminService{
 
 	@Override
 	public List<StockAttributesDTO> updateVisibleStockAttributes(List<StockAttributesDTO> stockAttributes) {
-		return stockAttributeRepository.findAll().stream()
-				.map((stockAttribute)-> mapper.map(stockAttributes, StockAttributesDTO.class))
-				.collect(Collectors.toList());
+		List<StockAttributeEntity> allAttributes = stockAttributeRepository.findAll();
+		for (StockAttributeEntity stockAttributeEntity : allAttributes) {
+			StockAttributesDTO dto = stockAttributes.stream().filter(
+					(attr)->{return 
+						attr.getId().equals(stockAttributeEntity.getId()) 
+						&& attr.isVisible() != stockAttributeEntity.isVisible();})
+					.findFirst().orElse(null);
+			if(dto != null) {
+				mapper.map(dto, stockAttributeEntity);
+			}
+		}
+		return getAllStockAttributes();
 	}
 	
 	

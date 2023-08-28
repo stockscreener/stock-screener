@@ -33,11 +33,11 @@ public class AdminController {
 	}
 	
 	@GetMapping("/attributes")
-	public ResponseEntity<?> getStockAttributesList(@RequestParam Long adminId){
-		return ResponseEntity.ok(adminService.getAllStockAttributes(adminId));
+	public ResponseEntity<?> getStockAttributesList(){
+		return ResponseEntity.ok(adminService.getAllStockAttributes());
 	}
 	
-	@PutMapping("/attibutes")
+	@PutMapping("/attributes")
 	public ResponseEntity<?> updateVisibleStockAttributes(@RequestBody List<StockAttributesDTO> stockAttributes){
 		return ResponseEntity.ok(adminService.updateVisibleStockAttributes(stockAttributes));
 	}

@@ -5,12 +5,11 @@ import { log } from "../utils/logger";
 export async function signinUserApi(data){
     try{
         let response = await axiosCall.post("/auth/signin", data);
-        log(response.data);
         return response
     }catch(ex){
-        log(ex)
-        toast.error(ex.response.data.message)
-        return ex.response.data;
+        log(ex.response.data)
+        toast.error(ex.response.data)
+        return null;
     }
 }
 
@@ -22,14 +21,39 @@ export async function registerUserApi(data){
     }catch(ex){
         log(ex)
         toast.error(ex.response.data.message)
-        return ex.response.data;
-
+        return null;
     }
 }
 
 export async function getUserProfile(){
     try{
         let response = await axiosCall.get(`/users/profile`);
+        log(response.data);
+        return response
+    }catch(ex){
+        log(ex)
+        toast.error(ex.message)
+        return ex.response;
+
+    }
+}
+
+export async function getVerificationProfile(id){
+    try{
+        let response = await axiosCall.get(`/users/profile/verify?advisorId=` + id);
+        log(response.data);
+        return response
+    }catch(ex){
+        log(ex)
+        toast.error(ex.message)
+        return ex.response;
+
+    }
+}
+
+export async function sendVerification(data){
+    try{
+        let response = await axiosCall.put(`/users/verify`,data);
         log(response.data);
         return response
     }catch(ex){
@@ -66,7 +90,7 @@ export async function updatePasswordApi(data){
     }
 }
 
-export async function getLimitedUserDetails(role){
+export async function getLimitedUserDetailsApi(role){
     try{
         let response = await axiosCall.get("/users/short?role="+ role);
         log(response.data);
@@ -79,3 +103,42 @@ export async function getLimitedUserDetails(role){
     }
 }
 
+export async function changeUserStatusApi(data){
+    try{
+        let response = await axiosCall.put("/users/disable", data);
+        log(response.data);
+        return response
+    }catch(ex){
+        log(ex)
+        toast.error(ex.message)
+        return ex.response;
+
+    }
+}
+
+export async function saveFeedback(data){
+    try{
+        let response = await axiosCall.put("/users/feedback", data);
+        log(response.data);
+        return response
+    }catch(ex){
+        log(ex)
+        toast.error(ex.message)
+        return ex.response;
+
+    }
+}
+
+export async function deleteUserAccount(data){
+    try{
+        log(data)
+        let response = await axiosCall.put("/users/delete", data);
+        log(response.data);
+        return response
+    }catch(ex){
+        log(ex)
+        toast.error(ex.message)
+        return ex.response;
+
+    }
+}

@@ -118,19 +118,5 @@ public class UserEntity {
 		feedback.setUser(this);
 	}
 	
-	public void deleteUser(DeletedUserEntity userToDelete) {
-		userToDelete.setEmail(this.email);
-		this.email = null;
-		userToDelete.setMobileNo(this.mobileNo);
-		this.mobileNo = null;
-		userToDelete.setUsername(this.username);
-		this.username = null;
-		userToDelete.setUser(this);
-		this.getScreens().forEach((screen)->screen.setAvailable(false));
-		this.getBlogs().forEach((blog)->blog.setAvailable(false));
-		userToDelete.setDeletedAt(LocalDateTime.now());
-		this.deletedUser = userToDelete;
-		this.setStatus(UserStatus.DELETED);
-	}
 	
 }

@@ -10,8 +10,9 @@ import lombok.*;
 @NoArgsConstructor
 public class DeleteUserDTO {
 	@NotNull
-	private Long id;
-	@NotNull
 	@NotBlank
 	private String reason;
+	@NotNull
+	@NotBlank
+	private String password;
 }

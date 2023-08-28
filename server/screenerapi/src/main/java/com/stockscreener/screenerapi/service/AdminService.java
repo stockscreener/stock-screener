@@ -12,7 +12,7 @@ public interface AdminService {
 
 	List<StocksListDTO> updateVisibleStocks(List<StocksListDTO> stocks);
 
-	List<StockAttributesDTO> getAllStockAttributes(Long adminId);
+	List<StockAttributesDTO> getAllStockAttributes();
 
 	List<StockAttributesDTO> updateVisibleStockAttributes(List<StockAttributesDTO> stockAttributes);
 	

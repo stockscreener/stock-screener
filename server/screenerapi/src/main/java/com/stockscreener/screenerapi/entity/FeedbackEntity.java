@@ -18,7 +18,7 @@ public class FeedbackEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private UserEntity user;
 
-    @Column(length = 255)
+    @Column(columnDefinition = "TEXT")
     private String review;
 
     @Column(columnDefinition = "DATETIME default CURRENT_TIMESTAMP")

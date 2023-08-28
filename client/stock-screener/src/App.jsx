@@ -16,6 +16,8 @@ import UpdatePassword from './components/updatePassword'
 import VisibleStocks from './components/admin/visibleStocks';
 import VisibleStockDetails from './components/admin/visibleStockDetails'
 import ManageUsers from './components/admin/manageUsers'
+import VerifyUsers from './components/admin/verifyUsers'
+import Support from './components/support'
 
 
 function App() {
@@ -43,10 +45,12 @@ function App() {
           <Route path="/screens" element={<Screens />}/>
           <Route path="/screens/new" element={<NewScreen />}/>
           <Route path="/profile" element={<UserProfile/>}/>
+          <Route path="/support" element={<Support/>}/>
           <Route path="/profile/password" element={<UpdatePassword/>}/>
           <Route path="/admin/stocks" element={<VisibleStocks />}/> 
           <Route path="/admin/details" element={<VisibleStockDetails />}/> 
-          <Route path="/admin/users" element={<ManageUsers />}/> 
+          <Route path="/admin/users" element={<ManageUsers />}/>
+          <Route path="/admin/users/verify" element={<VerifyUsers id={4}/>}/> 
         </Routes>
       </div>
       <ToastContainer autoClose={4000} position='bottom-right'/>

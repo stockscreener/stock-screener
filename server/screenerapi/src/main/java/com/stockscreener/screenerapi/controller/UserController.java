@@ -6,11 +6,13 @@ import javax.validation.Valid;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import com.stockscreener.screenerapi.dto.ApiResponseDTO;
+import com.stockscreener.screenerapi.dto.FeedbackRespDTO;
 import com.stockscreener.screenerapi.dto.user.AdminProfileDTO;
 import com.stockscreener.screenerapi.dto.user.AdvisorProfileDTO;
 import com.stockscreener.screenerapi.dto.user.DeleteUserDTO;
@@ -24,11 +26,14 @@ import com.stockscreener.screenerapi.service.AdvisorService;
 import com.stockscreener.screenerapi.service.UserService;
 import com.stockscreener.screenerapi.utils.AuthUtils;
 
+import lombok.extern.slf4j.Slf4j;
+
 
 @RestController
 @RequestMapping("/users")
-@CrossOrigin("*")
+@CrossOrigin(origins = "*")
 @Validated
+@Slf4j
 public class UserController {	
 	@Autowired
 	private UserService userService;
@@ -92,15 +97,29 @@ public class UserController {
 		return ResponseEntity.ok(advisorService.verifyAdvisor(verify));
 	}
 	
-	@DeleteMapping("/delete")
+	@PutMapping("/delete")
 	public ResponseEntity<?> deleteUser(@RequestBody DeleteUserDTO user){
+		log.info(user.getReason());
 		return ResponseEntity.ok(userService.deleteUser(user));
 	}
 	
 	@PutMapping("/disable")
 	public ResponseEntity<?> disableUsers(@RequestBody Map<Long, UserStatus> usersStatus){
-		
+		System.out.println(usersStatus);
 		return ResponseEntity.ok(userService.updateUsersStatus(usersStatus));
 	}
 	
+	@GetMapping("/profile/verify")
+	public ResponseEntity<?> getVerificationProfile(@RequestParam Long advisorId){
+		UserEntity advisor = userService.getUserProfile(advisorId);
+		AdvisorProfileDTO profileDTO = new AdvisorProfileDTO();
+		mapper.map(advisor, profileDTO);
+		mapper.map(advisor.getAdvisor(), profileDTO);
+		return ResponseEntity.ok(profileDTO);
+	}
+	
+	@PutMapping("/feedback")
+	public ResponseEntity<?> saveFeedback(@RequestBody @Valid FeedbackRespDTO feedback){
+		return ResponseEntity.status(HttpStatus.OK).body(userService.saveFeedback(feedback));
+	}
 }

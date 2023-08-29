@@ -1,5 +1,6 @@
 package com.stockscreener.screenerapi.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,6 +27,7 @@ import com.stockscreener.screenerapi.enums.UserStatus;
 import com.stockscreener.screenerapi.repository.ScreenRepository;
 import com.stockscreener.screenerapi.repository.StockAttributeRepository;
 import com.stockscreener.screenerapi.repository.UserRepository;
+import com.stockscreener.screenerapi.utils.AuthUtils;
 
 @Service
 @Transactional
@@ -49,8 +51,6 @@ public class ScreenServiceImpl implements ScreenService{
 							return dto;})
 						.collect(Collectors.toList());
 	}
-	
-	
 
 	@Override
 	public List<ScreenDTO> getMyScreens(Long userId) {
@@ -65,19 +65,35 @@ public class ScreenServiceImpl implements ScreenService{
 
 	@Override
 	public ApiResponseDTO addNewScreen(NewScreenDTO newScreen) {
-		UserEntity user = userRepository.findById(newScreen.getUserId()).orElseThrow(()->new ResourceNotFoundException("Invalid User"));
+		UserEntity user = userRepository.findById(AuthUtils.customUserDetails().getUserId()).orElseThrow(()->new ResourceNotFoundException("Invalid User"));
 		if(!user.getStatus().equals(UserStatus.ACTIVE))
 			throw new BadRequestException("You have been Blocked by Admin!");
-		ScreenEntity screen = screenRepository.save(mapper.map(newScreen, ScreenEntity.class));
+		// create new screen
+		ScreenEntity screen = new ScreenEntity();
 		screen.setAvailable(true);
-		if(user.getRole().equals(UserRole.ROLE_INVESTOR))
-			screen.setPremium(false);
+		screen.setDescription(newScreen.getDescription());
+		screen.setName(newScreen.getName());
+		screen.setScreenFilters(new ArrayList<>());
+		// check is user is allowed to create premium screen
+		if(user.getRole().equals(UserRole.ROLE_ADVISOR)){
+			screen.setPremium(newScreen.isPremium());
+		}
+		// create filters list with attribute assigned
+		
+		List<ScreenFilterEntity> filters = newScreen.getScreenFilters().stream().map((filter)->{
+			ScreenFilterEntity filterEntity = new ScreenFilterEntity();
+			filterEntity.setFilterConstraint(filter.getFilterConstraint());
+			filterEntity.setScreen(screen);
+			screen.getScreenFilters().add(filterEntity);
+			filterEntity.setValue(filter.getValue());
+			filterEntity.setStockAttribute(
+					stockAttributeRepository.findById(filter.getStockAttributeId())
+						.orElseThrow(()->new ResourceNotFoundException("Attribute not available!"))
+			);
+			return filterEntity;
+		}).collect(Collectors.toList());
 		screen.setUser(user);
-		screen.addScreenFilters(
-				newScreen.getScreenFilters().stream()
-					.map((dto)->mapper.map(dto, ScreenFilterEntity.class))
-					.collect(Collectors.toList())
-				);
+		screenRepository.save(screen);
 		return new ApiResponseDTO("Screen Saved");
 	}
 

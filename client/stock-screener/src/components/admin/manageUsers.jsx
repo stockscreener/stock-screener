@@ -112,7 +112,7 @@ function ManageUsers() {
     }
 
     return (<div className="container mt-3">
-        <h3 className="">Manage {buttonClass}s</h3>
+        
         <div className="d-flex flex-column flex-shrink-0 p-3 bg-light position-absolute" id="sidebar" style={{ width: 280, height: "100%", top: 70, left: 0 }}>
                 <hr className="mt-5" />
                 <ul className="nav nav-pills flex-column mb-auto">
@@ -127,9 +127,11 @@ function ManageUsers() {
                     </li>
                 </ul>
             </div>
-        <hr className="mb-5" />
+        
         {!showVerification && 
-        <div className="container mt-4 px-5">
+        <div className="col-9 m-auto px-5">
+            <h3 className="">Manage {buttonClass}s</h3>
+            <hr className="mb-5" />
                 <div>
                     <DataGrid rows={users} columns={columns} pageSizeOptions={[5, 10, 20]}
                         checkboxSelection

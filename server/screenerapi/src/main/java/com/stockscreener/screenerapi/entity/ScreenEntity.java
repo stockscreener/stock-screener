@@ -39,7 +39,10 @@ public class ScreenEntity {
 	    /* Helper methods */
 	    
 	    public void addScreenFilters(List<ScreenFilterEntity> screenFilters) {
+	    	System.out.println(screenFilters.toString());
+	    	System.out.println(this.getScreenFilters());
 	    	this.getScreenFilters().addAll(screenFilters);
 	    	screenFilters.forEach((filter)->filter.setScreen(this));
+	    	screenFilters.forEach(System.out::println);
 	    }
 }

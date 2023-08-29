@@ -37,7 +37,7 @@ function App() {
     <div className=''>
       {/* navigation bar */}
       <ConditionalNavigationBar navState={navState} navUpdate={navUpdate}/>
-      <div className="container">
+      <div className="">
         <Routes>
           <Route path='/' element={<Screener />} />
           <Route path='/login' element={<Login />} />

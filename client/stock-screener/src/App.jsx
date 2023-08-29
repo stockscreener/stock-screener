@@ -9,7 +9,8 @@ import NavigationBar from './components/navigationBar'
 import Screener from './components/screener'
 import Login from './components/login'
 import Signup from './components/signup'
-import CreateNewWatchlist from './components/createNewWatchlist'
+import Watchlist from './components/watchlist'
+// import Watchlist from './components/createWatchlist'
 
 function App() {
 
@@ -32,7 +33,9 @@ function App() {
           <Route path='/' element={<Screener />} />
           <Route path='/login' element={<Login />} />
           <Route path='/register' element={<Signup />}/>
-          <Route path='/createNewWatchlist' element={<CreateNewWatchlist />} />
+         {/* // <Route path='/createNewWatchlist' element={<CreateNewWatchlist />} /> */}
+         <Route path='/createWatchlist' element={<Watchlist />} />
+          <Route path='/watchlist' element={<Watchlist />} />
         </Routes>
       </div>
       <ToastContainer />

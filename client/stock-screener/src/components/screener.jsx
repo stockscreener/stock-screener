@@ -10,6 +10,7 @@ function Screener() {
       { field: 'id', headerName: 'ID', width: 70 },
       { field: 'Name', headerName: 'Name', width: 200 },
       { field: 'Symbol', headerName: 'Symbol', width: 120 },
+      { field: 'close', headerName: 'CMP', width: 120 },
       { field: 'MarketCapitalization', headerName: 'Market Capitalization', width: 180 },
       { field: 'PERatio', headerName: 'PE Ratio', width: 120 },
       { field: 'PriceToBookRatio', headerName: 'Price to Book Ratio', width: 180 },
@@ -56,6 +57,7 @@ function Screener() {
     React.useEffect(() => {
       // Replace 'YOUR_API_ENDPOINT' with the actual API endpoint URL
       fetch('https://www.alphavantage.co/query?function=OVERVIEW&symbol=IBM&apikey=demo')
+      //fetch('https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=IBM&apikey=demo')
         .then((response) => response.json())
         .then((data) => {
           // Create an array with a single item, which is the data object

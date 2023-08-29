@@ -146,7 +146,7 @@ public class ScreenServiceImpl implements ScreenService{
 	public List<StockAttributesDTO> getStockAttributes() {
 		return stockAttributeRepository.findByIsVisible(true).stream()
 				.map((attribute)->mapper.map(attribute, StockAttributesDTO.class))
-				.toList();
+				.collect(Collectors.toList());
 	}
 	
 	

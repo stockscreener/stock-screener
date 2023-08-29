@@ -18,6 +18,7 @@ import VisibleStockDetails from './components/admin/visibleStockDetails'
 import ManageUsers from './components/admin/manageUsers'
 import VerifyUsers from './components/admin/verifyUsers'
 import Support from './components/support'
+import Watchlist from './components/watchlist'
 
 
 function App() {
@@ -51,6 +52,8 @@ function App() {
           <Route path="/admin/details" element={<VisibleStockDetails />}/> 
           <Route path="/admin/users" element={<ManageUsers />}/>
           <Route path="/admin/users/verify" element={<VerifyUsers id={4}/>}/> 
+          <Route path='/createWatchlist' element={<Watchlist />} />
+          <Route path='/watchlists' element={<Watchlist />} />
         </Routes>
       </div>
       <ToastContainer autoClose={4000} position='bottom-right'/>

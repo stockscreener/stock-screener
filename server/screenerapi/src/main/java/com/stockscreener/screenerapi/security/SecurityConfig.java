@@ -42,6 +42,7 @@ public class SecurityConfig {
 						"/swagger*/**", "/v*/api-docs/**").permitAll()
 				.antMatchers("/users/short", "users/disable", "/admin/attributes").hasRole("ADMIN")
 				.antMatchers("/users/profile").authenticated()
+
 				.anyRequest().authenticated()
 				.and().sessionManagement() // configure HttpSession management
 				// DO NOT use HttpSession for storing any session info

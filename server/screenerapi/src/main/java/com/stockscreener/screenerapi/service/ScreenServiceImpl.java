@@ -165,5 +165,4 @@ public class ScreenServiceImpl implements ScreenService{
 				.collect(Collectors.toList());
 	}
 	
-	
 }

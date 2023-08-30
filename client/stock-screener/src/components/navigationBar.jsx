@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import DropdownMenu from "./dropdownMenu";
+import StockSearchDropdown from "./searchStocks";
 
 function NavigationBar() {
     return <nav className="navbar navbar-expand-md navbar-dark bg-dark">
@@ -25,7 +26,7 @@ function NavigationBar() {
             </ul>
             <nav className="navbar bg-dark mx-3">
                 <div className="container-fluid bg-dark">
-                    <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
+                    <StockSearchDropdown />
                 </div>
             </nav>
             <DropdownMenu />

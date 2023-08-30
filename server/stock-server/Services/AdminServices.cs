@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using stock_server.AlphaVantage;
 using StockDB.Data;
 using StockDB.Models;
@@ -191,6 +192,46 @@ namespace stock_server.Services
 			return "Failed";
 
 		}
+
+		public async Task<List<(int StockId, string Symbol, string Name, Boolean visible)>> GetStockInfoAsync()
+		{
+			var stockInfoList = await _context.Stocks
+				.Select(stock => new
+				{
+					stock.Id,
+					stock.Symbol,
+					stock.Name,
+					stock.IsVisible
+				})
+				.ToListAsync();
+
+			return stockInfoList.Select(stock => (stock.Id, stock.Symbol, stock.Name, stock.IsVisible==1?true:false)).ToList();
+		}
+
+		public async Task<string> ChangeStockVisibilityAsync(int stockId, bool isVisible)
+		{
+			try
+			{
+				var stock = await _context.Stocks.FindAsync(stockId);
+
+				if (stock == null)
+				{
+					return "Stock not found";
+				}
+
+				stock.IsVisible = (sbyte?)(isVisible ? 1 : 0);
+				await _context.SaveChangesAsync();
+
+				return "Success";
+			}
+			catch (Exception ex)
+			{
+				// Handle the exception, log details, and provide a user-friendly error message
+				Console.WriteLine(ex.ToString());
+				return "Failure";
+			}
+		}
+
 		private DateOnly? ParseDate(string dateStr)
 		{
 			if (DateTime.TryParseExact(dateStr, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime date))

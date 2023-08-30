@@ -85,21 +85,6 @@ function Blog() {
                     </div>
                 })}
                 <hr className="mb-5" />
-                {buttonClass === "Blog" &&
-                    <div className="container mt-4 px-5">
-                        <div class="mb-3">
-                            {/* <textarea type="text" rows={1} value={title}
-                                class="form-control" name="title" id="title" placeholder="Blog Title" onChange={(e) => setContent(e.target.value)} /> */}
-                       
-                            <textarea type="text" rows={25} value={content}
-                                class="form-control" name="content" id="content" placeholder="Write something here" onChange={(e) => setContent(e.target.value)} />
-                        </div>
-                        <div className="m-2 text-center mt-4">
-                            <button className="btn btn-danger btn-lg me-3" onClick={() => setContent('')} >Clear</button>
-                            <button className="btn btn-primary btn-lg" onClick={createBlog}>Create</button>
-                        </div>
-                    </div>
-                }
             </div>
         </div>
     </div>)

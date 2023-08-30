@@ -16,7 +16,8 @@ import UpdatePassword from './components/updatePassword'
 import VisibleStocks from './components/admin/visibleStocks';
 import VisibleStockDetails from './components/admin/visibleStockDetails'
 import ManageUsers from './components/admin/manageUsers'
-
+import Blog from './components/blog'
+import CreateBlog from './components/createBlog'
 
 function App() {
 
@@ -47,6 +48,8 @@ function App() {
           <Route path="/admin/stocks" element={<VisibleStocks />}/> 
           <Route path="/admin/details" element={<VisibleStockDetails />}/> 
           <Route path="/admin/users" element={<ManageUsers />}/>
+          <Route path="/blogs" element={<Blog />}/>
+          <Route path="/blogs/create" element={<CreateBlog />}/>
         </Routes>
       </div>
       <ToastContainer autoClose={4000} position='bottom-right'/>

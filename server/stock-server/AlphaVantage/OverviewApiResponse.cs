@@ -1,4 +1,6 @@
-﻿namespace stock_server.AlphaVantage
+﻿using Newtonsoft.Json;
+
+namespace stock_server.AlphaVantage
 {
 	public class OverviewApiResponse
 	{
@@ -41,14 +43,18 @@
 		public string EVToRevenue { get; set; }
 		public string EVToEBITDA { get; set; }
 		public string Beta { get; set; }
+		[JsonProperty("52WeekHigh")]
 		public string Week52High { get; set; }
+		[JsonProperty("52WeekLow")]
 		public string Week52Low { get; set; }
+		[JsonProperty("50DayMovingAverage")]
 		public string Day50MovingAverage { get; set; }
+		[JsonProperty("200DayMovingAverage")]
 		public string Day200MovingAverage { get; set; }
 		public string SharesOutstanding { get; set; }
 		public string DividendDate { get; set; }
 		public string ExDividendDate { get; set; }
-		
+
 
 	}
 }

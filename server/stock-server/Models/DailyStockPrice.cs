@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace StockData.Models
+namespace StockDB.Models
 {
     public partial class DailyStockPrice
     {

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using stock_server.Services;
-using StockData.Data;
+using StockDB.Data;
 
 namespace stock_server.Controllers
 {
@@ -21,7 +21,7 @@ namespace stock_server.Controllers
 		public async Task<IActionResult> PopulateDatabase()
 		{
 			var adminServices = new AdminServices(_context);
-			string result = await adminServices.PopulateDBAsync();
+			string result = await adminServices.PopulateAllStocksOverview();
 
 			return Ok(result);
 		}

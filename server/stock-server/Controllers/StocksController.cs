@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using StockData.Data;
-using StockData.Models;
+using StockDB.Data;
+using StockDB.Models;
 
 namespace stock_server.Controllers
 {
@@ -25,10 +25,10 @@ namespace stock_server.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Stock>>> GetStocks()
         {
-          if (_context.Stocks == null)
-          {
-              return NotFound();
-          }
+            if (_context.Stocks == null)
+            {
+                return NotFound();
+            }
             return await _context.Stocks.ToListAsync();
         }
 
@@ -36,10 +36,10 @@ namespace stock_server.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Stock>> GetStock(int id)
         {
-          if (_context.Stocks == null)
-          {
-              return NotFound();
-          }
+            if (_context.Stocks == null)
+            {
+                return NotFound();
+            }
             var stock = await _context.Stocks.FindAsync(id);
 
             if (stock == null)
@@ -86,10 +86,10 @@ namespace stock_server.Controllers
         [HttpPost]
         public async Task<ActionResult<Stock>> PostStock(Stock stock)
         {
-          if (_context.Stocks == null)
-          {
-              return Problem("Entity set 'StockContext.Stocks'  is null.");
-          }
+            if (_context.Stocks == null)
+            {
+                return Problem("Entity set 'StockContext.Stocks'  is null.");
+            }
             _context.Stocks.Add(stock);
             await _context.SaveChangesAsync();
 

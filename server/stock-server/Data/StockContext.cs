@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-using StockData.Models;
+using StockDB.Models;
 
-namespace StockData.Data
+namespace StockDB.Data
 {
     public partial class StockContext : DbContext
     {
@@ -23,6 +23,7 @@ namespace StockData.Data
         public virtual DbSet<Earning> Earnings { get; set; } = null!;
         public virtual DbSet<FinancialMetric> FinancialMetrics { get; set; } = null!;
         public virtual DbSet<IncomeStatement> IncomeStatements { get; set; } = null!;
+        public virtual DbSet<ScreenerDataView> ScreenerDataViews { get; set; } = null!;
         public virtual DbSet<Stock> Stocks { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -568,6 +569,155 @@ namespace StockData.Data
                     .HasForeignKey(d => d.Symbol)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("income_statements_ibfk_2");
+            });
+
+            modelBuilder.Entity<ScreenerDataView>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("screener_data_view");
+
+                entity.Property(e => e.AnalystTargetPrice)
+                    .HasPrecision(10, 2)
+                    .HasColumnName("analyst_target_price");
+
+                entity.Property(e => e.Beta)
+                    .HasPrecision(10, 3)
+                    .HasColumnName("beta");
+
+                entity.Property(e => e.BookValue)
+                    .HasPrecision(20, 2)
+                    .HasColumnName("book_value");
+
+                entity.Property(e => e.Cik).HasColumnName("cik");
+
+                entity.Property(e => e.ClosePrice)
+                    .HasPrecision(20, 4)
+                    .HasColumnName("close_price");
+
+                entity.Property(e => e.Day200MovingAverage)
+                    .HasPrecision(10, 2)
+                    .HasColumnName("day_200_moving_average");
+
+                entity.Property(e => e.Day50MovingAverage)
+                    .HasPrecision(10, 2)
+                    .HasColumnName("day_50_moving_average");
+
+                entity.Property(e => e.DilutedEpsTtm)
+                    .HasPrecision(10, 2)
+                    .HasColumnName("diluted_eps_ttm");
+
+                entity.Property(e => e.DividendPerShare)
+                    .HasPrecision(10, 2)
+                    .HasColumnName("dividend_per_share");
+
+                entity.Property(e => e.DividendYield)
+                    .HasPrecision(10, 4)
+                    .HasColumnName("dividend_yield");
+
+                entity.Property(e => e.Ebitda).HasColumnName("ebitda");
+
+                entity.Property(e => e.Eps)
+                    .HasPrecision(10, 3)
+                    .HasColumnName("eps");
+
+                entity.Property(e => e.EvToEbitda)
+                    .HasPrecision(10, 2)
+                    .HasColumnName("ev_to_ebitda");
+
+                entity.Property(e => e.EvToRevenue)
+                    .HasPrecision(10, 3)
+                    .HasColumnName("ev_to_revenue");
+
+                entity.Property(e => e.Exchange)
+                    .HasMaxLength(20)
+                    .HasColumnName("exchange");
+
+                entity.Property(e => e.ForwardPe)
+                    .HasPrecision(10, 2)
+                    .HasColumnName("forward_pe");
+
+                entity.Property(e => e.GrossProfitTtm).HasColumnName("gross_profit_ttm");
+
+                entity.Property(e => e.Industry)
+                    .HasMaxLength(255)
+                    .HasColumnName("industry");
+
+                entity.Property(e => e.MarketCapitalization).HasColumnName("market_capitalization");
+
+                entity.Property(e => e.Name)
+                    .HasMaxLength(255)
+                    .HasColumnName("name");
+
+                entity.Property(e => e.OperatingMarginTtm)
+                    .HasPrecision(10, 3)
+                    .HasColumnName("operating_margin_ttm");
+
+                entity.Property(e => e.PeRatio)
+                    .HasPrecision(10, 2)
+                    .HasColumnName("pe_ratio");
+
+                entity.Property(e => e.PegRatio)
+                    .HasPrecision(10, 3)
+                    .HasColumnName("peg_ratio");
+
+                entity.Property(e => e.PriceToBookRatio)
+                    .HasPrecision(10, 2)
+                    .HasColumnName("price_to_book_ratio");
+
+                entity.Property(e => e.PriceToSalesRatioTtm)
+                    .HasPrecision(10, 3)
+                    .HasColumnName("price_to_sales_ratio_ttm");
+
+                entity.Property(e => e.ProfitMargin)
+                    .HasPrecision(10, 4)
+                    .HasColumnName("profit_margin");
+
+                entity.Property(e => e.QuarterlyEarningsGrowthYoy)
+                    .HasPrecision(10, 3)
+                    .HasColumnName("quarterly_earnings_growth_yoy");
+
+                entity.Property(e => e.QuarterlyRevenueGrowthYoy)
+                    .HasPrecision(10, 3)
+                    .HasColumnName("quarterly_revenue_growth_yoy");
+
+                entity.Property(e => e.ReturnOnAssetsTtm)
+                    .HasPrecision(10, 4)
+                    .HasColumnName("return_on_assets_ttm");
+
+                entity.Property(e => e.ReturnOnEquityTtm)
+                    .HasPrecision(10, 2)
+                    .HasColumnName("return_on_equity_ttm");
+
+                entity.Property(e => e.RevenuePerShareTtm)
+                    .HasPrecision(10, 2)
+                    .HasColumnName("revenue_per_share_ttm");
+
+                entity.Property(e => e.RevenueTtm).HasColumnName("revenue_ttm");
+
+                entity.Property(e => e.Sector)
+                    .HasMaxLength(100)
+                    .HasColumnName("sector");
+
+                entity.Property(e => e.SharesOutstanding).HasColumnName("shares_outstanding");
+
+                entity.Property(e => e.Symbol)
+                    .HasMaxLength(10)
+                    .HasColumnName("symbol");
+
+                entity.Property(e => e.VolTimesClose)
+                    .HasPrecision(39, 4)
+                    .HasColumnName("vol_times_close");
+
+                entity.Property(e => e.Volume).HasColumnName("volume");
+
+                entity.Property(e => e.Week52High)
+                    .HasPrecision(10, 2)
+                    .HasColumnName("week_52_high");
+
+                entity.Property(e => e.Week52Low)
+                    .HasPrecision(10, 2)
+                    .HasColumnName("week_52_low");
             });
 
             modelBuilder.Entity<Stock>(entity =>

@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
-using StockData.Data;
+using StockDB.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 

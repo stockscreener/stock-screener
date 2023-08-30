@@ -122,4 +122,10 @@ public class UserController {
 	public ResponseEntity<?> saveFeedback(@RequestBody @Valid FeedbackRespDTO feedback){
 		return ResponseEntity.status(HttpStatus.OK).body(userService.saveFeedback(feedback));
 	}
+	
+	@PutMapping("/joinPremium")
+	public ResponseEntity<?> joinPremium()
+	{
+		return ResponseEntity.status(HttpStatus.OK).body(userService.joinPremium());
+	}
 }

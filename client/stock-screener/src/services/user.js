@@ -142,3 +142,16 @@ export async function deleteUserAccount(data){
 
     }
 }
+
+export async function joinPremium(){
+    try{
+        let response = await axiosCall.put("/users/joinPremium");
+        log(response.data);
+        return response
+    }catch(ex){
+        log(ex)
+        toast.error(ex.message)
+        return ex.response;
+
+    }
+}

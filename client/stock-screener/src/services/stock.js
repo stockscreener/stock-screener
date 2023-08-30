@@ -3,7 +3,7 @@ import { log } from "../utils/logger";
 import axios from "axios";
 
 const stockAxios = axios.create({
-    baseURL: "https://localhost:9999",
+    baseURL: "https://192.168.1.2:9999",
     headers: {
       'Content-Type': 'application/json',
     },

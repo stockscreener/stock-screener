@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using stock_server.Services;
 using StockDB.Data;
+using Newtonsoft.Json;
 
 namespace stock_server.Controllers
 {
@@ -27,15 +28,24 @@ namespace stock_server.Controllers
 		}
 
 		[HttpPost("changeVisibility")]
-		public async Task<ActionResult<string>> ChangeStockVisibility([FromBody] ChangeStockVisibilityRequest request)
-		{
-			var result = await _adminServices.ChangeStockVisibilityAsync(request.StockId, request.IsVisible);
-			return Ok(result);
-		}
+        public async Task<IActionResult> ChangeStockVisibilityBulk([FromBody] List<ChangeStockVisibilityRequest> requests)
+        {
+            List<string> results = new List<string>();
+
+            foreach (var request in requests)
+            {
+                var result = await _adminServices.ChangeStockVisibilityAsync(request.StockId, request.IsVisible);
+				Console.WriteLine(request.IsVisible);
+                results.Add(result);
+            }
+
+            return Ok(results);
+        }
 
 		public class ChangeStockVisibilityRequest
 		{
 			public int StockId { get; set; }
+			[JsonProperty("visible")]
 			public bool IsVisible { get; set; }
 		}
 

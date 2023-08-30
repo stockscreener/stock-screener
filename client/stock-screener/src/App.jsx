@@ -19,6 +19,7 @@ import ManageUsers from './components/admin/manageUsers'
 import VerifyUsers from './components/admin/verifyUsers'
 import Support from './components/support'
 import JoinPremium from './components/joinPremium'
+import MyScreens from './components/myScreens'
 
 
 function App() {
@@ -44,6 +45,7 @@ function App() {
           <Route path='/login' element={<Login />} />
           <Route path='/register' element={<Signup />}/>
           <Route path="/screens" element={<Screens />}/>
+          <Route path="/my-screens" element={<MyScreens />}/>
           <Route path="/screens/new" element={<NewScreen />}/>
           <Route path="/profile" element={<UserProfile/>}/>
           <Route path="/support" element={<Support/>}/>
@@ -53,7 +55,6 @@ function App() {
           <Route path="/admin/users" element={<ManageUsers />}/>
           <Route path="/admin/users/verify" element={<VerifyUsers id={4}/>}/> 
           <Route path="/premium" element={<JoinPremium/>}/> 
-
           </Routes>
       </div>
       <ToastContainer autoClose={4000} position='bottom-right'/>

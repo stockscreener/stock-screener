@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { log } from '../utils/logger';
 import { searchStocksShort } from '../services/stock';
 import { toast } from 'react-toastify';
 

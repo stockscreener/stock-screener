@@ -22,10 +22,8 @@ function DropdownMenu() {
                 <Link className="nav-link dropdown-toggle" to="/" id="dropdownId" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{authSlice.name != 'null'?authSlice.name : optionalName}</Link>
                 <div className="dropdown-menu px-1 border border-secondary border-3" aria-labelledby="dropdownId">
                     <Link className="dropdown-item" to="/profile">Profile</Link>
-                    <Link className="dropdown-item" to="/watchlists">Watchlists</Link>
-                    <Link className="dropdown-item" to="/myscreens">My Screens</Link>
+                    <Link className="dropdown-item" to="/my-screens">My Screens</Link>
                     <Link className="dropdown-item" to="/premium">Join Premium</Link>
-                    <Link className="dropdown-item" to="/advisors">Advisors</Link>
                     <Link className="dropdown-item" to="/support">Support</Link>
                     <Link className="dropdown-item" to="/" onClick={logoutUser}>Logout</Link>
                 </div>
@@ -35,10 +33,10 @@ function DropdownMenu() {
                 <Link className="nav-link dropdown-toggle" to="/" id="dropdownId" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{authSlice.name != 'null'?authSlice.name : optionalName}</Link>
                 <div className="dropdown-menu px-1 border border-secondary border-3" aria-labelledby="dropdownId">
                     <Link className="dropdown-item" to="/profile">Profile</Link>
+                    <Link className="dropdown-item" to="/my-screens">My Screens</Link>
                     <Link className="dropdown-item" to="/admin/stocks">Manage Visible Stocks</Link>
                     <Link className="dropdown-item" to="/admin/details">Manage Stock Details</Link>
                     <Link className="dropdown-item" to="/admin/users">Manage Users</Link>
-                    <Link className="dropdown-item" to="/admin/stats">Statistics</Link>
                     <Link className="dropdown-item" to="/support">Support</Link>
                     <Link className="dropdown-item" to="/" onClick={logoutUser}>Logout</Link>
                 </div>
@@ -48,9 +46,7 @@ function DropdownMenu() {
                 <Link className="nav-link dropdown-toggle" to="/" id="dropdownId" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{authSlice.name != 'null'?authSlice.name : optionalName}</Link>
                 <div className="dropdown-menu x-1 border border-secondary border-3" aria-labelledby="dropdownId">
                     <Link className="dropdown-item" to="/profile">Profile</Link>
-                    <Link className="dropdown-item" to="/watchlists">Watchlists</Link>
-                    <Link className="dropdown-item" to="/advisor/my-screens">My Screens</Link>
-                    <Link className="dropdown-item" to="/advisor/my-blogs">My Blogs</Link>
+                    <Link className="dropdown-item" to="/my-screens">My Screens</Link>
                     <Link className="dropdown-item" to="/premium">Join Premium</Link>
                     <Link className="dropdown-item" to="/support">Support</Link>
                     <Link className="dropdown-item" to="/" onClick={logoutUser}>Logout</Link>

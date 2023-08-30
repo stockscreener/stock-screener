@@ -32,6 +32,6 @@ public interface UserService {
 	UserEntity getUserStatusRole(Long id);
 	List<LimitedUserDetailsDTO> updateUsersStatus(Map<Long, UserStatus> usersStatus);
 	String saveFeedback(FeedbackRespDTO feedback);
-	
+	public String joinPremium();
 
 }

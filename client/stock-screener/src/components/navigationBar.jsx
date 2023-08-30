@@ -12,13 +12,7 @@ function NavigationBar() {
         <div className="collapse navbar-collapse" id="collapsibleNavId">
             <ul className="navbar-nav me-auto mt-2 ms-5 mt-lg-0">
                 <li className="nav-item">
-                    <Link className="nav-link active" to="/" aria-current="page">Home <span className="visually-hidden">(current)</span></Link>
-                </li>
-                <li className="nav-item">
                     <Link className="nav-link" to="/">Screener</Link>
-                </li>
-                <li className="nav-item">
-                    <Link className="nav-link" to="/blogs">Blogs</Link>
                 </li>
                 <li className="nav-item">
                     <Link className="nav-link" to="/screens">Screens</Link>

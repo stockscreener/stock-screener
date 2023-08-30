@@ -42,7 +42,7 @@ namespace stock_server.Controllers
             search = search?.Trim().ToLower();
 
             var matchingStocks = await _context.Stocks
-                .Where(stock => stock.Symbol.ToLower().Contains(search) || stock.Name.ToLower().Contains(search))
+                .Where(stock => stock.IsVisible==1 && (stock.Symbol.ToLower().Contains(search) || stock.Name.ToLower().Contains(search)))
                 .Select(stock => new {
                     StockId = stock.Id,
                     Symbol = stock.Symbol,
@@ -56,13 +56,36 @@ namespace stock_server.Controllers
 
         // GET: api/Stocks
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Stock>>> GetStocks()
+        public async Task<ActionResult<IEnumerable<object>>> GetStocks()
         {
             if (_context.Stocks == null)
             {
                 return NotFound();
             }
-            return await _context.Stocks.ToListAsync();
+            return await _context.Stocks
+                        .Where(stock => stock.IsVisible==1)
+                        .Join(_context.FinancialMetrics,
+                            Stock=>Stock.Id,
+                            FinancialMetrics => FinancialMetrics.StockId,(stock, financialMetrics) => new
+                            {
+                                Id = stock.Id,
+                                Symbol = stock.Symbol,
+                                Name = stock.Name,
+                                Ebitda = financialMetrics.Ebitda,
+                                PeRatio = financialMetrics.PeRatio,
+                                BookValue = financialMetrics.BookValue,
+                                PegRatio = financialMetrics.PegRatio,
+                                DividendYield = financialMetrics.DividendYield,
+                                Eps = financialMetrics.Eps,
+                                PriceToBookRatio = financialMetrics.PriceToBookRatio,
+                                Beta = financialMetrics.Beta,
+                                Week52High = financialMetrics.Week52High,
+                                Week52Low = financialMetrics.Week52Low,
+                                Day50MovingAverage = financialMetrics.Day50MovingAverage,
+                                Day200MovingAverage = financialMetrics.Day200MovingAverage,
+                                ProfitMargin = financialMetrics.ProfitMargin
+                                })
+                        .ToListAsync();
         }
 
         // GET: api/Stocks/5
@@ -73,7 +96,9 @@ namespace stock_server.Controllers
             {
                 return NotFound();
             }
-            var stock = await _context.Stocks.FindAsync(id);
+            var stock = await _context.Stocks
+                    .Where(stock=>stock.IsVisible==1)
+                    .FirstOrDefaultAsync(s=>s.Id == id);
 
             if (stock == null)
             {
@@ -85,3 +110,4 @@ namespace stock_server.Controllers
     
     }
 }
+

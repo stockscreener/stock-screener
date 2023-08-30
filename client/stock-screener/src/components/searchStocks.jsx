@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { log } from '../utils/logger';
 import { searchStocksShort } from '../services/stock';
+import { toast } from 'react-toastify';
 
 function StockSearchDropdown() {
     const [searchQuery, setSearchQuery] = useState('');
@@ -12,7 +12,7 @@ function StockSearchDropdown() {
                     setMatchingStocks(response.data);
                 })
                 .catch(error => {
-                    log.error(error);
+                    toast.error(error);
                 });
         } else {
             setMatchingStocks([]);

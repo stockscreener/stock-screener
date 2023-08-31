@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import '../../node_modules/bootstrap/dist/css/bootstrap.min.css'
-import { getAllScreensApi } from '../services/screen'
+import { getMyScreensApi } from '../services/screen'
 import { log } from '../utils/logger'
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
@@ -13,7 +13,7 @@ function MyScreens() {
     useEffect(() => {
         log("in use effect of screen")
         const fetchScreens = async () => {
-            let response = await getAllScreensApi("/screens/myscreens");
+            let response = await getMyScreensApi("/screens/myscreens");
             log(response);
             if (response && response.status === 200) {
                 if (response.data.length === 0) {
@@ -26,7 +26,7 @@ function MyScreens() {
     }, [])
 
     return (<div className='container'>
-        <h4 className='mt-4'>My Screens
+        <h4 className='mt-4'>Screens {">"} My Screens
         <button className='btn btn-primary float-end ' onClick={() => navigate("/screens/new")}>New Screen</button>
         </h4>
         <div className='row'>

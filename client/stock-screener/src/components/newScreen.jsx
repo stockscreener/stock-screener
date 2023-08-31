@@ -82,7 +82,7 @@ function NewScreen() {
             log(response);
             if (response && response.status === 200) {
                 toast(response.data.message);
-                navigate("/screens")
+                navigate("/my-screens")
             }
         }
     };

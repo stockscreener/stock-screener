@@ -20,12 +20,18 @@ import VerifyUsers from './components/admin/verifyUsers'
 import Support from './components/support'
 import JoinPremium from './components/joinPremium'
 import MyScreens from './components/myScreens'
+import ProtectedRoute from './utils/protected-routes'
+import AdminRoute from './utils/admin-routes'
+import InvalidRoute from './components/invalidRoute'
+import StockInfo from './components/stockInfo'
 
 
 function App() {
 
   const navState = useSelector((state) => state.navbar.visible)
-  const navUpdate = useSelector((state)=>state.navbar.update)
+  const navUpdate = useSelector((state) => state.navbar.update)
+  const role = useSelector(state => state.auth.role)
+  const isAuthenticated = useSelector((state) => state.auth.status)
   const dispatch = useDispatch()
 
 
@@ -38,32 +44,88 @@ function App() {
   return (
     <div className=''>
       {/* navigation bar */}
-      <ConditionalNavigationBar navState={navState} navUpdate={navUpdate}/>
+      <ConditionalNavigationBar navState={navState} navUpdate={navUpdate} />
       <div className="">
         <Routes>
           <Route path='/' element={<Screener />} />
+          
           <Route path='/login' element={<Login />} />
-          <Route path='/register' element={<Signup />}/>
-          <Route path="/screens" element={<Screens />}/>
-          <Route path="/my-screens" element={<MyScreens />}/>
-          <Route path="/screens/new" element={<NewScreen />}/>
-          <Route path="/profile" element={<UserProfile/>}/>
-          <Route path="/support" element={<Support/>}/>
-          <Route path="/profile/password" element={<UpdatePassword/>}/>
-          <Route path="/admin/stocks" element={<VisibleStocks />}/> 
-          <Route path="/admin/details" element={<VisibleStockDetails />}/> 
-          <Route path="/admin/users" element={<ManageUsers />}/>
-          <Route path="/admin/users/verify" element={<VerifyUsers id={4}/>}/> 
-          <Route path="/premium" element={<JoinPremium/>}/> 
-          </Routes>
+          
+          <Route path='/register' element={<Signup />} />
+          
+          <Route path="/screens" element={<Screens />} />
+          
+          <Route path="/stock-info" element={<StockInfo />} />
+
+          {/* Protected Routes */}
+          <Route path="/my-screens" element={
+            <ProtectedRoute authenticated={isAuthenticated} >
+              <MyScreens />
+            </ProtectedRoute>} />
+
+          <Route path="/screens/new" element={
+            <ProtectedRoute authenticated={isAuthenticated}>
+              <NewScreen />
+            </ProtectedRoute>} />
+
+          <Route path="/profile" element={
+            <ProtectedRoute authenticated={isAuthenticated}>
+              <UserProfile />
+            </ProtectedRoute>}
+          />
+          <Route path="/support" element={
+            <ProtectedRoute authenticated={isAuthenticated}>
+              <Support />
+            </ProtectedRoute>}
+          />
+
+          <Route path="/profile/password" element={
+            <ProtectedRoute authenticated={isAuthenticated} >
+              <UpdatePassword />
+            </ProtectedRoute>}
+          />
+
+          <Route path="/premium" element={
+            <ProtectedRoute authenticated={isAuthenticated}>
+              <JoinPremium />
+            </ProtectedRoute>}
+          />
+
+          {/* Admin Routes */}
+          <Route path="/admin/stocks" element={
+            <AdminRoute isAdmin={role === "ROLE_ADMIN"} >
+              <VisibleStocks />
+            </AdminRoute>}
+          />
+
+          <Route path="/admin/details" element={
+            <AdminRoute isAdmin={role === "ROLE_ADMIN"} >
+              <VisibleStockDetails />
+            </AdminRoute>}
+          />
+
+          <Route path="/admin/users" element={
+            <AdminRoute isAdmin={role === "ROLE_ADMIN"} >
+              <ManageUsers />
+            </AdminRoute>}
+          />
+
+          <Route path="/admin/users/verify" element={
+            <AdminRoute isAdmin={role === "ROLE_ADMIN"}>
+              <VerifyUsers id={4} />
+            </AdminRoute>}
+          />
+          {/* Invalid requests route */}
+          <Route path="*" element={<InvalidRoute />} />
+        </Routes>
       </div>
-      <ToastContainer autoClose={4000} position='bottom-right'/>
+      <ToastContainer autoClose={4000} position='bottom-right' />
     </div>
   );
 }
 
 function ConditionalNavigationBar(props) {
-  const isLoginOrSignup = window.location.pathname.includes('/login') || window.location.pathname.includes('/register');  
+  const isLoginOrSignup = window.location.pathname.includes('/login') || window.location.pathname.includes('/register');
   return isLoginOrSignup ? null : <NavigationBar />;
 }
 

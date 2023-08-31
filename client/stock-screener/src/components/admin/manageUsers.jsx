@@ -62,7 +62,7 @@ function ManageUsers() {
     const getData = async () => {
         log(role)
         let response = await getLimitedUserDetailsApi(uriRole)
-        if (response['status'] === 200) {
+        if (response && response['status'] === 200) {
             setUsers(response.data)
         }
     }
@@ -82,7 +82,7 @@ function ManageUsers() {
         log(data)
         log(role)
         let response = await changeUserStatusApi(data)
-        if (response['status'] === 200) {
+        if (response && response['status'] === 200) {
             changeRole(buttonClass)
         }
     }
@@ -112,9 +112,17 @@ function ManageUsers() {
     }
 
     return (<div className="container mt-3">
-        
-        <div className="d-flex flex-column flex-shrink-0 p-3 bg-light position-absolute" id="sidebar" style={{ width: 280, height: "100%", top: 70, left: 0 }}>
-                <hr className="mt-5" />
+        <button className="btn btn-primary pb-3" type="button" data-bs-toggle="offcanvas"
+                data-bs-target="#offcanvasScrolling" aria-controls="offcanvasScrolling"
+                style={{ borderRadius: 30, width: 80, height: 30, position: "absolute", top: 72, left: 15 }}
+            ><h5 style={{ position: "relative", top: -4, left: -2 }}>Menu</h5></button>
+
+            <div className="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
+                <div className="offcanvas-header">
+                    <h5 className="offcanvas-title" id="offcanvasScrollingLabel">Stock Screener</h5>
+                    <button type="button" className="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <div className="offcanvas-body">
                 <ul className="nav nav-pills flex-column mb-auto">
                     <li className="nav-item">
                         <div className={buttonClass==="Investor"?"nav-link active":"nav-link link-dark"} >
@@ -127,7 +135,7 @@ function ManageUsers() {
                     </li>
                 </ul>
             </div>
-        
+        </div>
         {!showVerification && 
         <div className="col-9 m-auto px-5">
             <h3 className="">Manage {buttonClass}s</h3>

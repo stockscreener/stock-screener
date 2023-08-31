@@ -41,17 +41,17 @@ function UpdatePassword() {
 
     return (<div className="container mt-5 row">
 
-        <button class="btn btn-primary pb-3" type="button" data-bs-toggle="offcanvas"
+        <button className="btn btn-primary pb-3" type="button" data-bs-toggle="offcanvas"
             data-bs-target="#offcanvasScrolling" aria-controls="offcanvasScrolling"
             style={{ borderRadius: 30, width: 80, height: 30, position: "absolute", top: 72, left: 15 }}
         ><h5 style={{ position: "relative", top: -4, left: -2 }}>Menu</h5></button>
 
-        <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
-            <div class="offcanvas-header">
-                <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Stock Screener</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        <div className="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
+            <div className="offcanvas-header">
+                <h5 className="offcanvas-title" id="offcanvasScrollingLabel">Stock Screener</h5>
+                <button type="button" className="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
             </div>
-            <div class="offcanvas-body">
+            <div className="offcanvas-body">
                 <ul className="nav nav-pills flex-column mb-auto">
                     <li className="nav-item">
                         <div className="nav-link link-dark" aria-current="page">

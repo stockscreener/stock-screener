@@ -56,7 +56,7 @@ function UserProfile() {
     }
 
     const generateSelectOptions = (selectKey, listOptions) => {
-        return <select class="form-select" name={selectKey} id={selectKey} value={profileDetails[selectKey]} onChange={onInputChange}>
+        return <select className="form-select" name={selectKey} id={selectKey} value={profileDetails[selectKey]} onChange={onInputChange}>
             <option value="" selected={profileDetails[selectKey] === ""}>Select</option>
             {listOptions.map((optionName) =>
             (<option value={optionName} selected={profileDetails[selectKey] === optionName}>
@@ -82,18 +82,18 @@ function UserProfile() {
 
     return (<div className="container mt-5">
         <div className="row">
-            <button class="btn btn-primary pb-3" type="button" data-bs-toggle="offcanvas" 
-            data-bs-target="#offcanvasScrolling" aria-controls="offcanvasScrolling"
-            style={{borderRadius:30, width:80, height:30, position:"absolute", top:72, left:15}}
-            ><h5 style={{position:"relative", top:-4, left:-2}}>Menu</h5></button>
+            <button className="btn btn-primary pb-3" type="button" data-bs-toggle="offcanvas"
+                data-bs-target="#offcanvasScrolling" aria-controls="offcanvasScrolling"
+                style={{ borderRadius: 30, width: 80, height: 30, position: "absolute", top: 72, left: 15 }}
+            ><h5 style={{ position: "relative", top: -4, left: -2 }}>Menu</h5></button>
 
-            <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
-                <div class="offcanvas-header">
-                    <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Stock Screener</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            <div className="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
+                <div className="offcanvas-header">
+                    <h5 className="offcanvas-title" id="offcanvasScrollingLabel">Stock Screener</h5>
+                    <button type="button" className="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                 </div>
-                <div class="offcanvas-body">
-               
+                <div className="offcanvas-body">
+
                     <ul className="nav nav-pills flex-column mb-auto">
                         <li className="nav-item">
                             <div className="nav-link active" aria-current="page">Profile</div>
@@ -102,10 +102,10 @@ function UserProfile() {
                             <div className="nav-link link-dark"><Link className="nav-link link-body-emphasis" to={"/profile/password"}>Update Password</Link></div>
                         </li>
                     </ul>
-               
+
                 </div>
             </div>
-            
+
             <div className="col">
                 {Object.keys(profileDetails).map((key, index) => (
                     <div className="row mb-3" key={key}>

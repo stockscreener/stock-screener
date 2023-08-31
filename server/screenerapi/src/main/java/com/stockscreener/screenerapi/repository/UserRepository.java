@@ -23,6 +23,8 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 			+ "FROM UserEntity u LEFT JOIN u.advisor a WHERE u.status != 'DELETED' AND u.role = ?1")
 	List<LimitedUserDetailsDTO> fetchLimitedUserDetails(UserRole role);
 	
+	
+	Optional<UserEntity> findByIdAndIsSubscribed(Long id, Boolean isSubscribed);
 	@Query("SELECT new com.stockscreener.screenerapi.entity.UserEntity"
 			+ "(u.id, u.status, u.role) FROM UserEntity u WHERE u.id = ?1")
 	Optional<UserEntity> fetchUserStatusRole(Long id);

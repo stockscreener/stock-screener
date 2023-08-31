@@ -89,24 +89,105 @@ namespace stock_server.Controllers
         }
 
         // GET: api/Stocks/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Stock>> GetStock(int id)
-        {
-            if (_context.Stocks == null)
-            {
-                return NotFound();
-            }
-            var stock = await _context.Stocks
-                    .Where(stock=>stock.IsVisible==1)
-                    .FirstOrDefaultAsync(s=>s.Id == id);
+	[HttpGet("{id}")]
+	public async Task<ActionResult<object>> GetStock(int id)
+	{
+	    if (_context.Stocks == null)
+	    {
+		return NotFound();
+	    }
 
-            if (stock == null)
-            {
-                return NotFound();
-            }
+	    var stock = await _context.Stocks
+		.Where(stock => stock.IsVisible == 1 && stock.Id == id)
+		.Select(stock => new
+		{
+		    stock.Id,
+		    stock.Symbol,
+		    stock.AssetType,
+		    stock.Name,
+		    stock.Description,
+		    stock.Cik,
+		    stock.Exchange,
+		    stock.Currency,
+		    stock.Country,
+		    stock.Sector,
+		    stock.Industry,
+		    stock.Address,
+		    stock.FiscalYearEnd,
+		    stock.IsVisible
+		})
+		.FirstOrDefaultAsync();
 
-            return stock;
-        } 
+	    if (stock == null)
+	    {
+		return NotFound();
+	    }
+
+	    return stock;
+	}
+	// GET: api/FinancialMetrics/5
+	[HttpGet("financial-metrics/{stockId}")]
+	public async Task<ActionResult<IEnumerable<object>>> GetFinancialMetricsForStock(int stockId)
+	{
+	    if (_context.FinancialMetrics == null)
+	    {
+		return NotFound();
+	    }
+
+	    var financialMetrics = await _context.FinancialMetrics
+		.Where(metric => metric.StockId == stockId)
+		.Join(_context.Stocks,
+		    metric => metric.StockId,
+		    stock => stock.Id,
+		    (metric, stock) => new
+		    {
+		        metric.Id,
+		        metric.StockId,
+		        stock.Symbol,
+		        LatestQuarter = metric.LatestQuarter.HasValue ? metric.LatestQuarter.Value.ToString("yyyy-MM-dd") : "",
+		        metric.MarketCapitalization,
+		        metric.Ebitda,
+		        metric.PeRatio,
+		        metric.PegRatio,
+		        metric.BookValue,
+		        metric.DividendPerShare,
+		        metric.DividendYield,
+		        metric.Eps,
+		        metric.RevenuePerShareTtm,
+		        metric.ProfitMargin,
+		        metric.OperatingMarginTtm,
+		        metric.ReturnOnAssetsTtm,
+		        metric.ReturnOnEquityTtm,
+		        metric.RevenueTtm,
+		        metric.GrossProfitTtm,
+		        metric.DilutedEpsTtm,
+		        metric.QuarterlyEarningsGrowthYoy,
+		        metric.QuarterlyRevenueGrowthYoy,
+		        metric.AnalystTargetPrice,
+		        metric.TrailingPe,
+		        metric.ForwardPe,
+		        metric.PriceToSalesRatioTtm,
+		        metric.PriceToBookRatio,
+		        metric.EvToRevenue,
+		        metric.EvToEbitda,
+		        metric.Beta,
+		        metric.Week52High,
+		        metric.Week52Low,
+		        metric.Day50MovingAverage,
+		        metric.Day200MovingAverage,
+		        metric.SharesOutstanding,
+		        metric.DividendDate,
+		        metric.ExDividendDate
+		    })
+		.ToListAsync();
+
+	    if (!financialMetrics.Any())
+	    {
+		return NotFound();
+	    }
+
+	    return Ok(financialMetrics);
+	}
     
     }
 }

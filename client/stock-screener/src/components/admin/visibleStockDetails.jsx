@@ -22,7 +22,7 @@ function VisibleStockDetails() {
     const updateAttributes = async()=>{
         log(attributes)
         let response = updateStockAttributes(attributes)
-        if(response['status']===200){
+        if(response && response['status']===200){
             log(response.data)
             setAttributes(response.data)
         }
@@ -48,10 +48,10 @@ function VisibleStockDetails() {
                 <div className="overflow-y-auto row" style={{ maxHeight: "calc(68vh)" }}>
                     {attributes.map((attribute) => {
                         return <div className="col-sm-6 col-md-4 col-md-3 mb-4 my-auto" key={attribute.id}>
-                            <div class="form-check fs-3">
-                                <input class="form-check-input" type="checkbox" value={attribute.id} id="flexCheckDefault"
+                            <div className="form-check fs-3">
+                                <input className="form-check-input" type="checkbox" value={attribute.id} id="flexCheckDefault"
                                  checked={attribute.visible===true} onChange={()=>changeVisible(attribute.id)}/>
-                                <label class="form-check-label" for="flexCheckDefault">
+                                <label className="form-check-label" htmlFor="flexCheckDefault">
                                     <h5>{attribute.displayName}</h5>
                                 </label>
                             </div>

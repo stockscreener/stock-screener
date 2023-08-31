@@ -3,6 +3,7 @@ package com.stockscreener.screenerapi.service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
@@ -232,6 +233,13 @@ public class UserServiceImpl implements UserService {
 		return user.getName()+" is Subcribed Successfully.";
 		
 	}
-	
 
+	@Override
+	public Boolean checkPremium() {
+		Optional<UserEntity> user = userRepository.findByIdAndIsSubscribed(AuthUtils.customUserDetails().getUserId(), true);
+		if(user.isPresent()) {
+			return user.get().getIsSubscribed();
+		}
+		return false;
+	}
 }

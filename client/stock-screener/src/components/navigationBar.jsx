@@ -5,7 +5,7 @@ import StockSearchDropdown from "./searchStocks";
 function NavigationBar() {
     return <nav className="navbar navbar-expand-md navbar-dark bg-dark">
 
-        <Link className="navbar-brand text-secondary ps-5" to="/"><b>Stock Screener</b></Link>
+        <Link className="navbar-brand ps-5" to="/"><b>Stock Screener</b></Link>
         <button className="navbar-toggler d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavId" aria-controls="collapsibleNavId"
             aria-expanded="false" aria-label="Toggle navigation"><span className="navbar-toggler-icon"></span></button>
 

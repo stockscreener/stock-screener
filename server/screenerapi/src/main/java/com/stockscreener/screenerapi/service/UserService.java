@@ -22,6 +22,7 @@ public interface UserService {
 	AdvisorProfileDTO updateAdvisorProfile(AdvisorProfileDTO advisor);
 	InvestorProfileDTO updateInvestorProfile(InvestorProfileDTO admin);
 	
+	Boolean checkPremium();
 	List<UserEntity> getAllUsers();
 	UserEntity addNewUser(UserEntity user, boolean isAdvisor);
 	UserEntity getUserDetails(long id);

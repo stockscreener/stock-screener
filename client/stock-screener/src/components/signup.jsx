@@ -34,7 +34,7 @@ function Signup() {
                 'advisor':isAdvisor,
             });
             log(response);
-            if (response['status'] === 201) {
+            if (response && response['status'] === 201) {
                 toast.success('Registration Successful');
                 navigate('/login');
             }

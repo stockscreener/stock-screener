@@ -13,7 +13,7 @@ function VerifyUsers(props) {
         log("use effect of profile")
         async function getProfile() {
             let response = await getVerificationProfile(id)
-            if(response['status']===200){
+            if(response && response['status']===200){
                 setProfileDetails(response.data)
                 setRemark(response.data.verificationRemark)
         }
@@ -29,7 +29,7 @@ function VerifyUsers(props) {
 
     const verifyUser = async (status) => {
         let response = await sendVerification({ 'id': id, 'verificationStatus': status, 'verificationRemark': profileDetails.verificationRemark })
-        if (response['status'] === 200) {
+        if (response && response['status'] === 200) {
             let details = { ...profileDetails }
             details['verificationStatus'] = response.data.verificationStatus
             details['verificationRemark'] = response.data.verificationRemark

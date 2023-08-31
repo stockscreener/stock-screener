@@ -128,4 +128,10 @@ public class UserController {
 	{
 		return ResponseEntity.status(HttpStatus.OK).body(userService.joinPremium());
 	}
+	
+	@GetMapping("/is-premium")
+	public ResponseEntity<?> checkIfUserIsPremium(){
+		return ResponseEntity.ok(userService.checkPremium());
+	}
+	
 }

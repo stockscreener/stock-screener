@@ -1,35 +1,43 @@
 import React, { useState, useEffect } from 'react';
 import { searchStocksShort } from '../services/stock';
-import { toast } from 'react-toastify';
+import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { stockInfo } from '../features/stockSlice';
 
 function StockSearchDropdown() {
     const [searchQuery, setSearchQuery] = useState('');
     const [matchingStocks, setMatchingStocks] = useState([]);
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
+    const getSearchResults = async () => {
+        let response = await searchStocksShort(searchQuery)
+        if (response && response['status'] === 200) {
+            setMatchingStocks(response.data);
+        }
+    }
+    const showStockInfo = (id)=>{
+        dispatch(stockInfo(id))
+        navigate(`/stock-info/`)
+    }
     useEffect(() => {
         if (searchQuery.length > 0) {
-            searchStocksShort(searchQuery)
-                .then(response => {
-                    setMatchingStocks(response.data);
-                })
-                .catch(error => {
-                    toast.error(error);
-                });
+            getSearchResults()
         } else {
             setMatchingStocks([]);
         }
     }, [searchQuery]);
 
-    return (<div class="dropdown">
-        <input class="form-control dropdown-toggle" type="search" data-bs-toggle="dropdown" aria-expanded="false"
+    return (<div className="dropdown">
+        <input className="form-control dropdown-toggle" type="search" data-bs-toggle="dropdown"
             placeholder="Search"
             aria-label="Search"
             value={searchQuery}
             onChange={e => setSearchQuery(e.target.value)} />
-        <ul class="dropdown-menu">
+        <ul className="dropdown-menu">
             {matchingStocks.map(stock => (
-                <li><a key={stock.stockId} className="dropdown-item" href="#">
+                <li><button key={stock.stockId} className="dropdown-item" onClick={()=>showStockInfo(stock.stockId)}>
                     {stock.symbol} - {stock.name}
-                </a>
+                </button>
                 </li>
             ))}
         </ul>

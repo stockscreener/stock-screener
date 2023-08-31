@@ -12,7 +12,7 @@ function VisibleStocks() {
     const getStocks = async () => {
         let response = await getStocksShort()
         log(response)
-        if (response['status'] === 200) {
+        if (response && response['status'] === 200) {
             setStocks(response.data)
             log(response.data)
         }
@@ -29,7 +29,7 @@ function VisibleStocks() {
 
     const saveChanges = async ()=>{
         let response = await saveVisibleStocks(stocks)
-        if(response['status']===200){
+        if(response && response['status']===200){
             toast.success("Changes Saved!")
         }
     }
@@ -43,10 +43,10 @@ function VisibleStocks() {
                 <div className="overflow-y-auto row" style={{ maxHeight: "calc(68vh)" }}>
                     {stocks.map((stock) => {
                         return <div className="col-sm-6 col-md-4 col-md-3 mb-4 my-auto">
-                            <div class="form-check fs-3">
-                                <input class="form-check-input" type="checkbox" value={stock.stockId} id="flexCheckDefault" 
+                            <div className="form-check fs-3">
+                                <input className="form-check-input" type="checkbox" value={stock.stockId} id="flexCheckDefault" 
                                 onChange={()=>changeVisibility(stock.stockId)} checked={stock.visible}/>
-                                <label class="form-check-label" for="flexCheckDefault">
+                                <label className="form-check-label" htmlFor="flexCheckDefault">
                                     <h5>{stock.name}</h5>
                                 </label>
                             </div>

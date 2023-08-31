@@ -36,17 +36,17 @@ function Support() {
     }
 
     return (<div className="container mt-3">
-        <button class="btn btn-primary pb-3" type="button" data-bs-toggle="offcanvas"
+        <button className="btn btn-primary pb-3" type="button" data-bs-toggle="offcanvas"
             data-bs-target="#offcanvasScrolling" aria-controls="offcanvasScrolling"
             style={{ borderRadius: 30, width: 80, height: 30, position: "absolute", top: 72, left: 15 }}
         ><h5 style={{ position: "relative", top: -4, left: -2 }}>Menu</h5></button>
 
-        <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
-            <div class="offcanvas-header">
-                <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Stock Screener</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        <div className="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
+            <div className="offcanvas-header">
+                <h5 className="offcanvas-title" id="offcanvasScrollingLabel">Stock Screener</h5>
+                <button type="button" className="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
             </div>
-            <div class="offcanvas-body">
+            <div className="offcanvas-body">
                 
                 
                     <ul className="nav nav-pills flex-column mb-auto">
@@ -67,9 +67,9 @@ function Support() {
         {buttonClass === "Feedback" &&
             <div className="container mt-4 px-5">
 
-                <div class="mb-3">
+                <div className="mb-3">
                     <textarea type="text" rows={6} value={review}
-                        class="form-control" name="review" id="review" placeholder="Write your views to us!" onChange={(e) => setReview(e.target.value)} />
+                        className="form-control" name="review" id="review" placeholder="Write your views to us!" onChange={(e) => setReview(e.target.value)} />
                 </div>
                 <div className="m-2 text-center mt-4">
                     <button className="btn btn-danger btn-lg me-3" onClick={() => setReview('')} >Clear</button>
@@ -79,16 +79,16 @@ function Support() {
         }
         {buttonClass === "Delete Account" &&
             <div className="container m-auto mt-4 px-5">
-                <div class="mb-3">
-                    <div class="mb-3">
-                        <label for="" class="form-label">Reason</label>
+                <div className="mb-3">
+                    <div className="mb-3">
+                        <label htmlFor="" className="form-label">Reason</label>
                         <input type="text" value={reason} onChange={(e) => setReason(e.target.value)}
-                            class="form-control" name="reason" placeholder="Why do you wish to delete this account?" />
+                            className="form-control" name="reason" placeholder="Why do you wish to delete this account?" />
                     </div>
-                    <div class="mb-3">
-                        <label for="" class="form-label">Password</label>
+                    <div className="mb-3">
+                        <label htmlFor="" className="form-label">Password</label>
                         <input type="password" value={password} onChange={(e) => setPassword(e.target.value)}
-                            class="form-control" name="password" placeholder="Enter your current Password" />
+                            className="form-control" name="password" placeholder="Enter your current Password" />
                     </div>
                 </div>
                 <div className="m-2 text-center mt-4">

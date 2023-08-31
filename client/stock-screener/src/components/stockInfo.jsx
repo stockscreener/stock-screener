@@ -4,16 +4,22 @@ import { toast } from "react-toastify";
 import { log } from "../utils/logger";
 import { DataGrid } from "@mui/x-data-grid";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 
 function StockInfo() {
-    const id = useSelector(state=>state.stockData.id)
+    const id = useSelector(state => state.stockData.id)
     const [stock, setStock] = useState([]);
     const [columns, setColumns] = useState([]);
     const [financialMetrics, setFinancialMetrics] = useState([]);
-
+    const navigate = useNavigate()
     useEffect(() => {
-        getData();
+        if (id === 0) {
+            toast.warn("Please select a stock first!")
+            navigate("/")
+        } else {
+            getData();
+        }
     }, [id]);
 
     const getData = async () => {
@@ -64,7 +70,7 @@ function StockInfo() {
 
                     </div>
                 </>
-                )}
+            )}
         </div>
 
         <h4>Financial Metrics</h4>

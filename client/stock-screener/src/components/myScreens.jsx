@@ -5,11 +5,13 @@ import { log } from '../utils/logger'
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
 import { FaCrown } from 'react-icons/fa';
+import { checkIfPremium } from '../services/user'
+import { useSelector } from 'react-redux'
 
 function MyScreens() {
     const [screens, setScreens] = useState([])
     const navigate = useNavigate()
-
+    const isLoggedIn = useSelector((state) => state.auth.status)
     useEffect(() => {
         log("in use effect of screen")
         const fetchScreens = async () => {
@@ -25,6 +27,24 @@ function MyScreens() {
         fetchScreens();
     }, [])
 
+    const showScreenDetails = async (premium) => {
+
+        log(isLoggedIn)
+        if (premium && !isLoggedIn) {
+            toast.error("Please Login to see this screen!")
+        }
+        else if (!premium) {
+            navigate("/")
+        } else {
+            let response = await checkIfPremium()
+            if (response && response.data) {
+                navigate("/")
+            } else {
+                toast.error("You must be a Premium User to view this screen!")
+            }
+        }
+    }
+
     return (<div className='container'>
         <h4 className='mt-4'>Screens {">"} My Screens
         <button className='btn btn-primary float-end ' onClick={() => navigate("/screens/new")}>New Screen</button>
@@ -33,7 +53,8 @@ function MyScreens() {
             <div className='col'>
                 <div className='row mt-2'>
                     {screens.map((screen) => {
-                        return <div className='card py-2 my-3 ps-5 rounded-4 ' id={"#screen-" + screen.id}>
+                        return <div className='card py-2 my-3 ps-5 rounded-4 ' id={"#screen-" + screen.id}
+                        onClick={() => showScreenDetails(screen.premium)}>
                             <div className='col'>
                                 <div className='float-end me-3'>
                                    {screen.premium && <FaCrown className='fs-2' style={{color:"gold"}}></FaCrown>}

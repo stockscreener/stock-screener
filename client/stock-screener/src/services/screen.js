@@ -2,67 +2,41 @@ import { toast } from "react-toastify";
 import axiosCall from "../utils/axios-call";
 import { log } from "../utils/logger";
 
-export async function getAllScreensApi(uri){
-    var response = null
-    try{
-        response = await axiosCall.get(uri);
-        log(`from screen:${response.data}`);
-        return response
-    }catch(ex){
-        log(`from screen:${ex}`)
-        toast.error(ex.message)
+async function handleRequest(requestFunction) {
+    try {
+        const response = await requestFunction();
+        return response;
+    } catch (ex) {
+        log(ex);
+        if (ex.code && ex.code === "ERR_NETWORK") {
+            toast.warning("Can't connect to server at the moment! Please try again later.");
+        } else {
+            toast.error("Some error occurred! Please try again.");
+        }
         return null;
     }
+}
+
+export async function getAllScreensApi(){
+    return await handleRequest(()=>axiosCall.get("/screens"))
+}
+
+export async function getMyScreensApi(){
+    return await handleRequest(()=>axiosCall.get("/screens/myscreens"))
 }
 
 export async function getStockAttributes(){
-    var response = null
-    try{
-        response = await axiosCall.get("/screens/attributes");
-        log(`from screen:${response.data}`);
-        return response
-    }catch(ex){
-        log(`from screen:${ex}`)
-        toast.error(ex.message)
-        return null;
-    }
+    return await handleRequest(()=>axiosCall.get("/screens/attributes"))
 }
 
 export async function getAdminStockAttributes(){
-    var response = null
-    try{
-        response = await axiosCall.get("/admin/attributes");
-        log(`from screen:${response.data}`);
-        return response
-    }catch(ex){
-        log(`from screen:${ex}`)
-        toast.error(ex.message)
-        return null;
-    }
+    return await axiosCall.get("/admin/attributes");;
 }
 
 export async function addNewScreen(data){
-    var response = null
-    try{
-        response = await axiosCall.post("/screens", data);
-        log(`from screen:${response.data}`);
-        return response
-    }catch(ex){
-        log(ex)
-        toast.error(ex.message)
-        return null;
-    }
+    return await axiosCall.post("/screens", data);
 }
 
 export async function updateStockAttributes(data){
-    var response = null
-    try{
-        response = await axiosCall.put("/admin/attributes", data);
-        log(`from screen:${response.data}`);
-        return response
-    }catch(ex){
-        log(`from screen:${ex}`)
-        toast.error(ex.message)
-        return null;
-    }
+    return await axiosCall.put("/admin/attributes", data);
 }

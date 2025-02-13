@@ -2,15 +2,26 @@ import { toast } from "react-toastify";
 import axiosCall from "../utils/axios-call";
 import { log } from "../utils/logger";
 
-export async function signinUserApi(data){
-    try{
-        let response = await axiosCall.post("/auth/signin", data);
-        return response
-    }catch(ex){
-        log(ex.response.data)
-        toast.error(ex.response.data)
+async function handleRequest(requestFunction) {
+    try {
+        const response = await requestFunction();
+        return response;
+    } catch (ex) {
+        log(ex);
+        if(ex.response && ex.response.status === 400){
+            toast.error("Invalid Email or Password!")
+        }
+        else if (ex.code && ex.code === "ERR_NETWORK") {
+            toast.warning("Can't connect to server at the moment! Please try again later.");
+        } else {
+            toast.error("Some error occurred! Please try again.");
+        }
         return null;
     }
+}
+
+export async function signinUserApi(data){
+    return await handleRequest(()=>axiosCall.post("/auth/signin", data));
 }
 
 export async function registerUserApi(data){
@@ -20,7 +31,7 @@ export async function registerUserApi(data){
         return response
     }catch(ex){
         log(ex)
-        toast.error(ex.response.data.message)
+        toast.error("Failed to register!")
         return null;
     }
 }
@@ -139,6 +150,32 @@ export async function deleteUserAccount(data){
         log(ex)
         toast.error(ex.message)
         return ex.response;
+
+    }
+}
+
+export async function joinPremium(){
+    try{
+        let response = await axiosCall.put("/users/joinPremium");
+        log(response.data);
+        return response
+    }catch(ex){
+        log(ex)
+        toast.error(ex.message)
+        return ex.response;
+
+    }
+}
+
+export async function checkIfPremium(){
+    try{
+        let response = await axiosCall.get("/users/is-premium");
+        log(response.data);
+        return response
+    }catch(ex){
+        log(ex)
+        toast.error(ex.message)
+        return null;
 
     }
 }

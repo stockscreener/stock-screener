@@ -58,8 +58,12 @@ public class ScreenServiceImpl implements ScreenService{
 				.orElseThrow(()->new ResourceNotFoundException("Invalid User!"));
 		if(!user.getStatus().equals(UserStatus.ACTIVE))
 			throw new BadRequestException("You have been Blocked by Admin!");
+		
 		return screenRepository.findByIsAvailableAndUserId(true, userId).stream()
-				.map((screen)->mapper.map(screen, ScreenDTO.class))
+				.map((screen)->{
+					ScreenDTO dto = mapper.map(screen, ScreenDTO.class);
+					dto.setUsername(screen.getUser().getUsername());
+					return dto;})
 				.collect(Collectors.toList());
 	}
 
@@ -164,6 +168,5 @@ public class ScreenServiceImpl implements ScreenService{
 				.map((attribute)->mapper.map(attribute, StockAttributesDTO.class))
 				.collect(Collectors.toList());
 	}
-	
 	
 }

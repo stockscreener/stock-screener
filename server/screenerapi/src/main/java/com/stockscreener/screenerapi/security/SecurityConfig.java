@@ -41,6 +41,7 @@ public class SecurityConfig {
 						"/screens/attributes", "/screens",
 						"/swagger*/**", "/v*/api-docs/**").permitAll()
 				.antMatchers("/users/short", "users/disable", "/admin/attributes").hasRole("ADMIN")
+				.antMatchers("/users/JoinPremium").hasRole("INVESTOR")
 				.antMatchers("/users/profile").authenticated()
 				.anyRequest().authenticated()
 				.and().sessionManagement() // configure HttpSession management

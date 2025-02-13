@@ -3,6 +3,7 @@ package com.stockscreener.screenerapi.service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
@@ -21,6 +22,7 @@ import com.stockscreener.screenerapi.dto.user.AdminProfileDTO;
 import com.stockscreener.screenerapi.dto.user.AdvisorProfileDTO;
 import com.stockscreener.screenerapi.dto.user.DeleteUserDTO;
 import com.stockscreener.screenerapi.dto.user.InvestorProfileDTO;
+import com.stockscreener.screenerapi.dto.user.JoinPremiumDTO;
 import com.stockscreener.screenerapi.dto.user.LimitedUserDetailsDTO;
 import com.stockscreener.screenerapi.dto.user.UpdatePasswordDTO;
 import com.stockscreener.screenerapi.entity.AdvisorEntity;
@@ -223,5 +225,21 @@ public class UserServiceImpl implements UserService {
 		user.addFeedback(feedbackEntity);
 		return "Feedback Submitted!";
 	}
+	
+	public String joinPremium()
+	{
+		UserEntity user=userRepository.findById(AuthUtils.customUserDetails().getUserId()).orElseThrow(()->new ResourceNotFoundException("No User found."));
+		user.setIsSubscribed(true);
+		return user.getName()+" is Subcribed Successfully.";
+		
+	}
 
+	@Override
+	public Boolean checkPremium() {
+		Optional<UserEntity> user = userRepository.findByIdAndIsSubscribed(AuthUtils.customUserDetails().getUserId(), true);
+		if(user.isPresent()) {
+			return user.get().getIsSubscribed();
+		}
+		return false;
+	}
 }

@@ -11,9 +11,10 @@ function NewScreen() {
     const [name, setName] = useState('')
     const [description, setDescription] = useState('')
     const [stockAttributes, setStockAttributes] = useState([])
-    const initialFilterMap = new Map(stockAttributes.map(attr => [attr.id, { stockAttributeId:attr.id, filterConstraint: "EQUAL", value: "" }]));
+    const initialFilterMap = new Map(stockAttributes.map(attr => [attr.id, { stockAttributeId: attr.id, filterConstraint: "EQUAL", value: "" }]));
     const [screenFilterMap, setScreenFilterMap] = useState(initialFilterMap);
-
+    const [premium, setPremium] = useState(false)
+    const role = useSelector((state)=>state.auth.role)
     // {
     //     "stockAttributeId": 0,
     //     "filterConstraint": "EQUAL",
@@ -66,21 +67,22 @@ function NewScreen() {
                     filterConstraint: filter.filterConstraint || "EQUAL",
                     value: filter.value || 0
                 }
-            )).filter(filter=>filter.value !== 0);
-    
-            
+            )).filter(filter => filter.value !== 0);
+
+
             log(filteredScreenFilters)
             let response = await addNewScreen({
                 userId: id,
                 name,
                 description,
+                premium,
                 screenFilters: filteredScreenFilters
             });
 
             log(response);
             if (response && response.status === 200) {
                 toast(response.data.message);
-                navigate("/screens")
+                navigate("/my-screens")
             }
         }
     };
@@ -88,6 +90,13 @@ function NewScreen() {
 
     return (<div className="container mt-2">
         <h4 className="">Create New Screen</h4><hr></hr>
+        {role === "ROLE_ADVISOR" && <div className="float-end col">
+            <h6>
+            <input
+                type="checkbox" className="form-check-input" id="isPremium" checked={premium}
+                onChange={(e) => setPremium(e.target.checked)}
+            /> Set as Premium Screen</h6>
+        </div>}
         <div className="col-12">
             <div className="row mb-2">
                 <div className="col-md-3 col-lg-2">
@@ -105,6 +114,7 @@ function NewScreen() {
                 <div className="col-md-3 col-lg-2">
                     <label htmlFor="description" className="form-label">Description :</label>
                 </div>
+
                 <div className="col-sm-12 col-md-8">
                     <textarea className="form-control col p-2" id="description" required="required"
                         autoComplete='screen-description' rows="3" maxLength={255}

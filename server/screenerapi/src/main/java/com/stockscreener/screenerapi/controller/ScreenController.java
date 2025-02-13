@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import com.stockscreener.screenerapi.dto.screen.EditScreenDTO;
 import com.stockscreener.screenerapi.dto.screen.NewScreenDTO;
 import com.stockscreener.screenerapi.service.ScreenService;
+import com.stockscreener.screenerapi.utils.AuthUtils;
 
 @RestController
 @RequestMapping("/screens")
@@ -32,7 +33,8 @@ public class ScreenController {
 	}
 	
 	@GetMapping("/myscreens")
-	public ResponseEntity<?> getMyScreens(@RequestParam Long userId){
+	public ResponseEntity<?> getMyScreens(){
+		Long userId = AuthUtils.customUserDetails().getUserId();
 		return ResponseEntity.ok(screenService.getMyScreens(userId));
 	}
 	

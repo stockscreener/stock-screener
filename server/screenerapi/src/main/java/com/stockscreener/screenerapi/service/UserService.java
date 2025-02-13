@@ -22,6 +22,7 @@ public interface UserService {
 	AdvisorProfileDTO updateAdvisorProfile(AdvisorProfileDTO advisor);
 	InvestorProfileDTO updateInvestorProfile(InvestorProfileDTO admin);
 	
+	Boolean checkPremium();
 	List<UserEntity> getAllUsers();
 	UserEntity addNewUser(UserEntity user, boolean isAdvisor);
 	UserEntity getUserDetails(long id);
@@ -32,6 +33,6 @@ public interface UserService {
 	UserEntity getUserStatusRole(Long id);
 	List<LimitedUserDetailsDTO> updateUsersStatus(Map<Long, UserStatus> usersStatus);
 	String saveFeedback(FeedbackRespDTO feedback);
-	
+	public String joinPremium();
 
 }

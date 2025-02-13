@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using stock_server.Services;
 using StockDB.Data;
 using StockDB.Models;
 
@@ -21,104 +22,173 @@ namespace stock_server.Controllers
             _context = context;
         }
 
+        [HttpGet("short")]
+        public async Task<ActionResult<IEnumerable<object>>> GetStockInfo()
+        {
+            var stockInfoList = await _context.Stocks
+                .Select(stock => new
+                {
+                    StockId = stock.Id,
+                    Symbol = stock.Symbol,
+                    Name = stock.Name,
+                    Visible = stock.IsVisible
+                })
+                .ToListAsync();
+            return Ok(stockInfoList);
+        }
+        [HttpGet("search")]
+        public async Task<object> SearchStocksAsync(string search)
+        {
+            search = search?.Trim().ToLower();
+
+            var matchingStocks = await _context.Stocks
+                .Where(stock => stock.IsVisible==1 && (stock.Symbol.ToLower().Contains(search) || stock.Name.ToLower().Contains(search)))
+                .Select(stock => new {
+                    StockId = stock.Id,
+                    Symbol = stock.Symbol,
+                    Name = stock.Name,
+                    Visible = stock.IsVisible
+                })
+                .ToListAsync();
+
+            return Ok(matchingStocks);
+        }
+
         // GET: api/Stocks
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Stock>>> GetStocks()
+        public async Task<ActionResult<IEnumerable<object>>> GetStocks()
         {
             if (_context.Stocks == null)
             {
                 return NotFound();
             }
-            return await _context.Stocks.ToListAsync();
+            return await _context.Stocks
+                        .Where(stock => stock.IsVisible==1)
+                        .Join(_context.FinancialMetrics,
+                            Stock=>Stock.Id,
+                            FinancialMetrics => FinancialMetrics.StockId,(stock, financialMetrics) => new
+                            {
+                                Id = stock.Id,
+                                Symbol = stock.Symbol,
+                                Name = stock.Name,
+                                Ebitda = financialMetrics.Ebitda,
+                                PeRatio = financialMetrics.PeRatio,
+                                BookValue = financialMetrics.BookValue,
+                                PegRatio = financialMetrics.PegRatio,
+                                DividendYield = financialMetrics.DividendYield,
+                                Eps = financialMetrics.Eps,
+                                PriceToBookRatio = financialMetrics.PriceToBookRatio,
+                                Beta = financialMetrics.Beta,
+                                Week52High = financialMetrics.Week52High,
+                                Week52Low = financialMetrics.Week52Low,
+                                Day50MovingAverage = financialMetrics.Day50MovingAverage,
+                                Day200MovingAverage = financialMetrics.Day200MovingAverage,
+                                ProfitMargin = financialMetrics.ProfitMargin
+                                })
+                        .ToListAsync();
         }
 
         // GET: api/Stocks/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Stock>> GetStock(int id)
-        {
-            if (_context.Stocks == null)
-            {
-                return NotFound();
-            }
-            var stock = await _context.Stocks.FindAsync(id);
+	[HttpGet("{id}")]
+	public async Task<ActionResult<object>> GetStock(int id)
+	{
+	    if (_context.Stocks == null)
+	    {
+		return NotFound();
+	    }
 
-            if (stock == null)
-            {
-                return NotFound();
-            }
+	    var stock = await _context.Stocks
+		.Where(stock => stock.IsVisible == 1 && stock.Id == id)
+		.Select(stock => new
+		{
+		    stock.Id,
+		    stock.Symbol,
+		    stock.AssetType,
+		    stock.Name,
+		    stock.Description,
+		    stock.Cik,
+		    stock.Exchange,
+		    stock.Currency,
+		    stock.Country,
+		    stock.Sector,
+		    stock.Industry,
+		    stock.Address,
+		    stock.FiscalYearEnd,
+		    stock.IsVisible
+		})
+		.FirstOrDefaultAsync();
 
-            return stock;
-        }
+	    if (stock == null)
+	    {
+		return NotFound();
+	    }
 
-        // PUT: api/Stocks/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutStock(int id, Stock stock)
-        {
-            if (id != stock.Id)
-            {
-                return BadRequest();
-            }
+	    return stock;
+	}
+	// GET: api/FinancialMetrics/5
+	[HttpGet("financial-metrics/{stockId}")]
+	public async Task<ActionResult<IEnumerable<object>>> GetFinancialMetricsForStock(int stockId)
+	{
+	    if (_context.FinancialMetrics == null)
+	    {
+		return NotFound();
+	    }
 
-            _context.Entry(stock).State = EntityState.Modified;
+	    var financialMetrics = await _context.FinancialMetrics
+		.Where(metric => metric.StockId == stockId)
+		.Join(_context.Stocks,
+		    metric => metric.StockId,
+		    stock => stock.Id,
+		    (metric, stock) => new
+		    {
+		        metric.Id,
+		        metric.StockId,
+		        stock.Symbol,
+		        LatestQuarter = metric.LatestQuarter.HasValue ? metric.LatestQuarter.Value.ToString("yyyy-MM-dd") : "",
+		        metric.MarketCapitalization,
+		        metric.Ebitda,
+		        metric.PeRatio,
+		        metric.PegRatio,
+		        metric.BookValue,
+		        metric.DividendPerShare,
+		        metric.DividendYield,
+		        metric.Eps,
+		        metric.RevenuePerShareTtm,
+		        metric.ProfitMargin,
+		        metric.OperatingMarginTtm,
+		        metric.ReturnOnAssetsTtm,
+		        metric.ReturnOnEquityTtm,
+		        metric.RevenueTtm,
+		        metric.GrossProfitTtm,
+		        metric.DilutedEpsTtm,
+		        metric.QuarterlyEarningsGrowthYoy,
+		        metric.QuarterlyRevenueGrowthYoy,
+		        metric.AnalystTargetPrice,
+		        metric.TrailingPe,
+		        metric.ForwardPe,
+		        metric.PriceToSalesRatioTtm,
+		        metric.PriceToBookRatio,
+		        metric.EvToRevenue,
+		        metric.EvToEbitda,
+		        metric.Beta,
+		        metric.Week52High,
+		        metric.Week52Low,
+		        metric.Day50MovingAverage,
+		        metric.Day200MovingAverage,
+		        metric.SharesOutstanding,
+		        metric.DividendDate,
+		        metric.ExDividendDate
+		    })
+		.ToListAsync();
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!StockExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+	    if (!financialMetrics.Any())
+	    {
+		return NotFound();
+	    }
 
-            return NoContent();
-        }
-
-        // POST: api/Stocks
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<Stock>> PostStock(Stock stock)
-        {
-            if (_context.Stocks == null)
-            {
-                return Problem("Entity set 'StockContext.Stocks'  is null.");
-            }
-            _context.Stocks.Add(stock);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetStock", new { id = stock.Id }, stock);
-        }
-
-        // DELETE: api/Stocks/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteStock(int id)
-        {
-            if (_context.Stocks == null)
-            {
-                return NotFound();
-            }
-            var stock = await _context.Stocks.FindAsync(id);
-            if (stock == null)
-            {
-                return NotFound();
-            }
-
-            _context.Stocks.Remove(stock);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        private bool StockExists(int id)
-        {
-            return (_context.Stocks?.Any(e => e.Id == id)).GetValueOrDefault();
-        }
+	    return Ok(financialMetrics);
+	}
+    
     }
 }
+

@@ -1,3 +1,3 @@
-export const baseURL = "https://localhost:8084"
+export const baseURL = "https://stock-screener.kaustubhs.in:9999"
 
-export const dotnetUrl = "https://localhost:9998"
+export const dotnetUrl = "https://stock-screener.kaustubhs.in:9998"

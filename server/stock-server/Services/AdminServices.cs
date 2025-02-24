@@ -131,7 +131,7 @@ namespace stock_server.Services
             _keyNo++;
             if (_keys.Count == 0)
             {
-                return null;
+                return "demo";
             }
             if (_keyNo == _keys.Count - 1)
             {
@@ -147,6 +147,9 @@ namespace stock_server.Services
                 foreach (var symbol in stockSymbols)
                 {
                     string key = getKey();
+                    if (key == "demo"){
+                        return "Done!"
+                    }
                     Console.WriteLine(await PopulateDBAsync(symbol, key));
                     await Task.Delay(12000);
                 }

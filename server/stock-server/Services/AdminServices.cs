@@ -147,7 +147,7 @@ namespace stock_server.Services
                 foreach (var symbol in stockSymbols)
                 {
                     string key = getKey();
-                    if (key == "demo"){
+                    if (key == "demo" || key == null){
                         return "Done!";
                     }
                     Console.WriteLine(await PopulateDBAsync(symbol, key));

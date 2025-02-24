@@ -148,7 +148,7 @@ namespace stock_server.Services
                 {
                     string key = getKey();
                     if (key == "demo"){
-                        return "Done!"
+                        return "Done!";
                     }
                     Console.WriteLine(await PopulateDBAsync(symbol, key));
                     await Task.Delay(12000);

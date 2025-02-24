@@ -146,24 +146,56 @@ namespace stock_server.Services
             {
                 foreach (var symbol in stockSymbols)
                 {
-                    string key = getKey();
-                    if (key == "demo" || key == null){
-                        return "Done!";
+                    int retryCount = 0;
+                    const int maxRetries = 3; // Retry up to 3 times per symbol
+
+                    while (retryCount < maxRetries)
+                    {
+                        string key = getKey();
+
+                        if (string.IsNullOrEmpty(key) || key == "demo")
+                        {
+                            Console.WriteLine("No valid API keys left. Skipping...");
+                            return "Done!";  // Stop execution if no keys are available
+                        }
+
+                        try
+                        {
+                            string response = await PopulateDBAsync(symbol, key);
+
+                            // Check if the response contains an API limit error
+                            if (response.Contains("Thank you for using Alpha Vantage!") ||
+                                response.Contains("API limit reached"))
+                            {
+                                Console.WriteLine($"API key {key} is rate-limited. Switching to next key...");
+                                retryCount++;
+                                continue; // Try again with the next key
+                            }
+
+                            Console.WriteLine(response);
+                            break; // Exit retry loop if successful
+                        }
+                        catch (HttpRequestException ex)
+                        {
+                            Console.WriteLine($"HTTP request failed for {symbol}: {ex.Message}");
+                            retryCount++;
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine($"Unexpected error for {symbol}: {ex.Message}");
+                            retryCount++;
+                        }
                     }
-                    Console.WriteLine(await PopulateDBAsync(symbol, key));
-                    await Task.Delay(12000);
+
+                    await Task.Delay(15000);  // Enforce API rate limits (5 requests/min)
                 }
-            }
-            catch (HttpRequestException ex)
-            {
-                // Handle the exception, log details, and provide a user-friendly error message
-                Console.WriteLine("HTTP request failed: " + ex.Message);
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.ToString());
+                Console.WriteLine($"Critical error in PopulateAllStocksOverview: {ex.Message}");
                 return "Failure";
             }
+
             return "Success";
         }
 
